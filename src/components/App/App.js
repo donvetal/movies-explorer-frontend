@@ -1,12 +1,13 @@
 import './App.css';
 import React from "react";
+import Main from "../Main/Main";
+import Header from "../Header/Header";
 
 function App() {
   return (
     <div className="App">
-      <h1>
-        Movies explorer frontend
-      </h1>
+      <Header/>
+      <Main/>
     </div>
   );
 }
