@@ -24,10 +24,11 @@
 
 .about-project__columns {
     max-width: 1140px;
+    list-style: none;
     width: 90%;
     min-width: 284px;
     margin: 0 auto;
-    padding: 0;
+    padding: 70px 0 110px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -38,9 +39,15 @@
 .about-project__column {
     display: flex;
     flex-direction: column;
-    margin: 70px 0 110px;
+    max-width: 550px;
+    width: 100%;
     padding: 0;
+    margin: 0 40px 0 0;
 
+}
+
+.about-project__column:last-of-type {
+    margin-right: 0;
 }
 
 .about-project__subtitle {
@@ -116,7 +123,6 @@
     margin: 0;
     padding: 0;
     background-color: #000000;
-    opacity: 20%;
     color: #FFFFFF;
 }
 
@@ -135,6 +141,102 @@
     color: #A0A0A0;
     margin: 0;
     padding: 14px 0 110px;;
+}
+
+@media screen and (max-width: 768px) {
+    .about-project__title {
+        max-width: 668px;
+        margin-top: 90px;
+    }
+
+    .about-project__columns {
+        max-width: 668px;
+        padding-bottom: 93px;
+
+    }
+
+    .about-project__column {
+        max-width: 319px;
+
+        margin-right: 30px;
+
+    }
+
+    .about-project__text {
+        font-size: 12px;
+        line-height: 18px;
+        margin-top: 22px;
+        max-width: 319px;
+
+    }
+
+    .about-project__service {
+        padding-bottom: 90px;
+    }
+
+    .about-project__timetables {
+        max-width: 668px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .about-project {
+        margin-right: 18px;
+        margin-left: 18px;
+
+    }
+
+    .about-project__title {
+        width: 100%;
+        margin-bottom: 28px;
+        margin-top: 70px;
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .about-project__columns {
+        width: 100%;
+        flex-direction: column;
+        padding-bottom: 4px;
+        padding-top: 60px;
+    }
+
+    .about-project__column {
+        padding-bottom: 56px;
+        margin-right: 0;
+
+
+    }
+
+    .about-project__subtitle {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .about-project__text {
+        font-size: 11px;
+        line-height: 16px;
+        margin-top: 16px;
+
+    }
+
+    .about-project__service {
+        padding-bottom: 70px;
+        padding-top: 10px;
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .about-project__time {
+        font-size: 11px;
+        line-height: 13px;
+        height: 35px;
+    }
+
+
+    .about-project__timetables {
+        width: 100%;
+    }
 }
 
 

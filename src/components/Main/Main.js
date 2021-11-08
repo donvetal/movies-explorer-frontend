@@ -13,7 +13,6 @@ function Main() {
       <Techs/>
       <AboutMe/>
       {/*<NavBar/>*/}
-      {/*<Portfolio/>*/}
     </section>
   );
 }

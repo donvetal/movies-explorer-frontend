@@ -2,6 +2,7 @@
 import React from "react";
 import './AboutMe.css';
 import myPhoto from '../../images/about-me.jpeg';
+import Portfolio from "../Portfolio/Portfolio";
 
 function AboutMe() {
   return (
@@ -19,7 +20,7 @@ function AboutMe() {
           <ul className="about-me__links">
             <li className="about-me__link-content">
               <a
-                href="https://developers.facebook.com/docs/javascript/"
+                href="https://developers.facebook.com/docs/javascript"
                 className="about-me__link"
                 target="_blank"
                 rel="noreferrer">
@@ -41,6 +42,7 @@ function AboutMe() {
           <img className="about-me__photo" src={myPhoto} alt="моё фото"/>
         </div>
       </article>
+      <Portfolio/>
     </section>
   );
 }

@@ -23,13 +23,12 @@
 
 .about-me__columns {
     margin: 0 auto;
-    padding: 0;
+    padding: 66px 0 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     max-width: 1140px;
     width: 90%;
-    min-width: 284px;
     border-top: 1px solid black;
 
 }
@@ -58,7 +57,7 @@
     line-height: 58px;
     text-align: start;
     margin: 0;
-    padding: 66px 0 0;
+    padding: 0;
 
 }
 
@@ -129,6 +128,102 @@
     align-self: flex-end;
     object-fit: cover;
     object-position: 50% 50%;
+
+}
+
+@media screen and (max-width: 768px) {
+    .about-me__title {
+        max-width: 668px;
+        margin-top: 90px;
+        /*width: 100%;*/
+    }
+
+    .about-me__columns {
+        max-width: 668px;
+    }
+
+    .about-me__author {
+        font-size: 40px;
+        line-height: 40px;
+    }
+
+    .about-me__info {
+        font-size: 12px;
+        line-height: 18px;
+        padding: 16px 0 20px;
+    }
+
+    .about-me__quote {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .about-me__photo {
+        max-height: 307px;
+
+    }
+
+    .about-me__column {
+        min-height: 307px;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .about-me {
+        margin-right: 14px;
+        margin-left: 14px;
+    }
+
+    .about-me__title {
+        font-size: 18px;
+        line-height: 22px;
+        min-width: 292px;
+        margin-top: 70px;
+        margin-bottom: 28px;
+    }
+
+    .about-me__photo {
+        max-height: 352px;
+        min-width: 292px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .about-me__columns {
+        padding-top: 60px;
+        min-width: 292px;
+        flex-direction: column-reverse;
+    }
+
+    .about-me__column {
+        min-width: 292px;
+        min-height: 100%;
+        width: 100%;
+        display: block;
+    }
+
+    .about-me__author {
+        padding-top: 40px;
+        font-size: 30px;
+        line-height: 37px;
+    }
+
+    .about-me__info {
+        font-size: 11px;
+        line-height: 16px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .about-me__quote {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .about-me__link-content {
+        padding-top: 40px;
+        margin-right: 26px;
+    }
 
 }
 
