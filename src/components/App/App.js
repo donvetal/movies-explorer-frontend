@@ -5,6 +5,8 @@ import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
+import Profile from "../Profile/Profile";
+import PageNotFound from "../PageNotFound/PageNotFound";
 
 
 function App() {
@@ -22,6 +24,12 @@ function App() {
         </Route>
         <Route path="/signin">
           <Login/>
+        </Route>
+        <Route path="/profile">
+          <Profile/>
+        </Route>
+        <Route path="*">
+          <PageNotFound/>
         </Route>
 
       </Switch>
