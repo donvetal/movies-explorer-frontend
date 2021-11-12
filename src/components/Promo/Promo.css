@@ -22,15 +22,20 @@
 }
 
 .promo__image {
-    max-width: 722px;
-    width: 100%;
+    background-image: url("../../images/landing-logo.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 722px;
+    height: 244px;
     display: flex;
     align-self: flex-end;
     margin: 0 70px 0 0;
     color: black;
     opacity: 0.7;
     padding: 0;
+
 }
+
 
 @media screen and (max-width: 840px) {
     .promo {
@@ -45,19 +50,20 @@
 
     }
 
-
     .promo__image {
-        max-width: 680px;
+        width: 680px;
+        height: 230px;
         align-self: center;
         margin: 0 auto;
     }
+
+
 }
 
 @media screen and (max-width: 681px) {
     .promo {
         padding-bottom: 40px;
         position: relative;
-        overflow: hidden;
     }
 
     .promo__title {
@@ -70,8 +76,11 @@
 
     .promo__image {
         position: absolute;
-        min-width: 680px;
+        max-width: 100%;
         bottom: 40px;
+        background-size: cover;
+        background-position: center;
+
     }
 
 

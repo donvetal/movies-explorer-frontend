@@ -10,7 +10,7 @@ function Portfolio() {
       <ul className="portfolio__links">
         <li className="portfolio__links-content">
           <a
-            href="https://donvetal.github.io/russian-travel"
+            href="https://donvetal.github.io/how-to-learn"
             className="portfolio__link"
             target="_blank"
             rel="noreferrer">
@@ -24,7 +24,7 @@ function Portfolio() {
             className="portfolio__link"
             target="_blank"
             rel="noreferrer">
-            <p className="portfolio__link-text">Адаптивныйр сайт</p>
+            <p className="portfolio__link-text">Адаптивный сайт</p>
             <img src={profileArrow} alt="картинка стрелки" className="portfolio__link-arrow"/>
           </a>
         </li>
