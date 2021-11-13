@@ -28,7 +28,7 @@ function Profile() {
             <input className="profile__input"
                    placeholder="email"
                    value={"pochta@yandex.ru"}
-                   type="text"
+                   type="email"
                    name="profile-email"
                    id="profile-email"
                    required/>

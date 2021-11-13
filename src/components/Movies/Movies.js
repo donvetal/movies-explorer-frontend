@@ -16,7 +16,7 @@ function Movies() {
       {
         isLoading ? (<Preloader/>) : (
           <>
-            <MovieCardList/>
+            <MovieCardList moviesCardsListType="general"/>
             <button type="button" className="movies__button">Ещё</button>
           </>
         )}

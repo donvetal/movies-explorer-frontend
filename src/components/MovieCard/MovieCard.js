@@ -1,126 +1,37 @@
 //MoviesCard — компонент одной карточки фильма.
-// import React, { useState} from "react";
-import React from "react";
+import React, {useState} from "react";
 import './MovieCard.css';
-import movieImage from "../../images/movie-picture.jpeg";
 
-function MovieCard() {
-  // const {moviesCardsListType, isMovieCardSelect} = props;
-  // const [isSelectMovieCard, setIsSelectMovieCard] = useState(isMovieCardSelect)
-  // const handleSelectClick = () => {
-  //   setIsSelectMovieCard(!isSelectMovieCard);
 
-// };
+function MovieCard(props) {
+  const {moviesCardsListType, isMovieCardSelect} = props;
+  const [isSelect, setIsSelect] = useState(isMovieCardSelect);
+
+  const handleSelectClick = () => {
+    setIsSelect(!isSelect);
+  };
   return (
     <>
-    <li className="movie-card">
-      <div className="movie-card__container">
-        <h2 className="movie-card__title">33 слова о дизайне</h2>
-        <p className="movie-card__time">1ч 47м</p>
-        <button type="button" className="movie-card__btn-select"></button>
-      </div>
-      <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
+      <li className="movie">
+        <div className="movie__container">
+          <h2 className="movie__title">{props.text}</h2>
+          <p className="movie__time">{props.time}</p>
+          {moviesCardsListType === "general" ? (
+            <button
+              onClick={handleSelectClick}
+              type="button"
+              className={`movie__btn-select ${isSelect ? "movie__btn-select_active" : ""}`}/>
+          ) : (
+            <button
+              type="button"
+              className="movie__btn-delete"/>
+          )}
 
-    </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
         </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
+        <img className="movie__image" src={props.image} alt="изображение из фильма"/>
 
       </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select movie-card__btn-select_active"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
 
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select movie-card__btn-select_active"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select movie-card__btn-select_active"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
-      <li className="movie-card">
-        <div className="movie-card__container">
-          <h2 className="movie-card__title">33 слова о дизайне</h2>
-          <p className="movie-card__time">1ч 47м</p>
-          <button type="button" className="movie-card__btn-select"></button>
-        </div>
-        <img className="movie-card__image" src={movieImage} alt="изображение из фильма"/>
-
-      </li>
     </>
 
   );

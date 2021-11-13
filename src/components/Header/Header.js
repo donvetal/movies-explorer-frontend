@@ -5,21 +5,9 @@ import {Link} from "react-router-dom";
 import logo from '../../images/logo.svg';
 import Navigation from "../Navigation/Navigation";
 import AuthNav from "../AuthNav/AuthNav";
-import profileLogo from "../../images/profile-logo.svg"
+import profileLogo from "../../images/profile-logo.svg";
+import MobileNavigation from "../MobileNavigation/MobileNavigation";
 
-// function Header() {
-//   return (
-//     <header className="header">
-//       <Link to="/" className="header__link">
-//         <img src={logo} alt="логтип проекта" className="header__logo"/>
-//       </Link>
-//       <AuthNav/>
-//     </header>
-//   )
-//     ;
-// }
-//
-// export default Header;
 function Header(props) {
   const {isLoggedIn = true} = props;
   return (
@@ -29,13 +17,14 @@ function Header(props) {
       </Link>
       {isLoggedIn ? (
         <>
-        <Navigation/>
-        <Link to="/profile" className="header__profile-link">
-          <p className="header__profile-link-text">Аккаунт</p>
-          <img className="header__profile-link-logo" src={profileLogo} alt="лого аккаунта"/>
-        </Link>
+          <Navigation/>
+          <Link to="/profile" className="header__profile-link">
+            <p className="header__profile-link-text">Аккаунт</p>
+            <img className="header__profile-link-logo" src={profileLogo} alt="лого аккаунта"/>
+          </Link>
+          <MobileNavigation/>
         </>
-        ) : (<AuthNav/>)}
+      ) : (<AuthNav/>)}
 
     </header>
   )

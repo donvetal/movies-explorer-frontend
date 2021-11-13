@@ -6,7 +6,6 @@
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #E8E8E8;
-    background-color: yellow;
 
 }
 
@@ -42,6 +41,10 @@
     border: 0;
     outline-style: none;
 
+}
+
+.search-form__input:focus-within {
+    outline: 1px solid #F9F9F9;
 }
 
 .search-form__container {

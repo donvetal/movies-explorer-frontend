@@ -9,6 +9,7 @@ function FilterCheckbox() {
              htmlFor="search-form__toggle-switch"
       >
         <input type="checkbox"
+               defaultChecked={true}
                className="search-form__toggle-switch-checkbox"
                name="search-form__toggle-switch"
                id="search-form__toggle-switch"/>

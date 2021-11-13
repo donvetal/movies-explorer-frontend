@@ -37,7 +37,6 @@
     display: flex;
     flex-direction: row;
     border-radius: 40px;
-
     min-width: 100px;
     height: 32px;
     margin: 0;
@@ -77,6 +76,10 @@
     .header {
         padding-left: 30px;
         padding-right: 30px;
+    }
+
+    .header__profile-link {
+        display: none;
     }
 }
 

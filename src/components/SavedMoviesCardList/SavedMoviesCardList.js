@@ -1,28 +1,24 @@
 //MoviesCardList — компонент, который управляет отрисовкой карточек фильмов на страницу и их количеством.
 import React from "react";
-import './MovieCardList.css';
+import './SavedMoviesCardList.css';
 import MovieCard from "../MovieCard/MovieCard";
-import {allMovies} from "../../utils/constants";
+import {savedMovies} from "../../utils/constants";
 
 
-function MovieCardList() {
+function SavedMoviesCardList() {
 
 
   return (
-
-    <ul className="movies__list">
-      {allMovies.map((movie) => <MovieCard
-        moviesCardsListType="general"
-        isMovieCardSelect={movie.isMovieCardSelect}
+    <ul className="saved-movies__list">
+      {savedMovies.map((movie) => <MovieCard
+        moviesCardsListType="saved"
         image={movie.image}
         text={movie.text}
         time={movie.time}
       />)}
-
     </ul>
   );
 }
 
-export default MovieCardList;
-
+export default SavedMoviesCardList;
 

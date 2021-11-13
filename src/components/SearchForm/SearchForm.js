@@ -6,7 +6,7 @@ import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 function SearchForm() {
   return (
     <section className="search">
-      <form action="/" method="get" className="search-form">
+      <form className="search-form">
         <input type="text"
                id="header-search"
                placeholder="Фильм"

@@ -1,3 +1,103 @@
+/*.search-form__toggle-switch-container {*/
+/*    margin: 0;*/
+/*    display: flex;*/
+/*    padding: 0 30px 0 29px;*/
+/*    background-color: #F9F9F9;*/
+/*    border-radius: 0 9px 9px 0;*/
+/*    min-height: 72px;*/
+/*    align-items: center;*/
+/*    max-width: 226px;*/
+
+/*}*/
+
+
+/*.search-form__toggle-switch-label {*/
+/*    position: relative;*/
+/*    display: inline-block;*/
+/*    width: 36px;*/
+/*    height: 20px;*/
+/*    margin: 0;*/
+/*}*/
+
+/*.search-form__toggle-switch-checkbox {*/
+/*    opacity: 0;*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*}*/
+
+/*.search-form__toggle-switch {*/
+/*    position: absolute;*/
+/*    cursor: pointer;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    background-color: #EBEBEB;*/
+/*    border-radius: 20px;*/
+/*    transition: box-shadow 0.3s ease-in;*/
+/*}*/
+
+
+/*.search-form__toggle-switch:before {*/
+/*    position: absolute;*/
+/*    content: "";*/
+/*    height: 16px;*/
+/*    width: 16px;*/
+/*    top: 2px;*/
+/*    left: 2px;*/
+/*    background-color: #F5F5F5;*/
+/*    transition: 0.4s;*/
+/*    border-radius: 50%;*/
+/*    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);*/
+/*}*/
+
+/*.search-form__toggle-switch-checkbox:checked + .search-form__toggle-switch {*/
+/*    background-color: #2BE080;*/
+/*}*/
+
+/*.search-form__toggle-switch-checkbox:checked + .search-form__toggle-switch:before {*/
+/*    background-color: #ffffff;*/
+/*    transform: translateX(16px);*/
+/*}*/
+
+/*.search-form__toggle-switch-text {*/
+/*    font-size: 13px;*/
+/*    font-weight: 400;*/
+/*    line-height: 18px;*/
+/*    display: flex;*/
+/*    margin: 0 0 0 14px;*/
+/*}*/
+
+/*@media screen and (max-width: 780px) {*/
+/*    .search-form__toggle-switch-container {*/
+/*        padding-left: 19px;*/
+/*        padding-right: 20px;*/
+/*        max-width: 207px;*/
+
+
+/*    }*/
+/*}*/
+
+/*@media screen and (max-width: 560px) {*/
+/*    .search-form__toggle-switch-container {*/
+/*        margin-top: 45px;*/
+/*        padding-right: 0;*/
+/*        padding-left: 0;*/
+/*        background-color: #FFFFFF;*/
+/*        justify-content: center;*/
+/*        border-radius: 0;*/
+/*        min-height: 20px;*/
+
+/*    }*/
+
+/*    .search-form__toggle-switch-text {*/
+/*        font-size: 11px;*/
+/*        line-height: 18px;*/
+/*        margin-left: 13px;*/
+/*    }*/
+/*}*/
+
+
 .search-form__toggle-switch-container {
     margin: 0;
     display: flex;
@@ -34,7 +134,7 @@
     bottom: 0;
     background-color: #EBEBEB;
     border-radius: 20px;
-    /*transition: box-shadow 0.3s ease-in;*/
+    transition: box-shadow 0.3s ease-in;
 }
 
 
