@@ -12,7 +12,7 @@
     width: 22px;
     height: 23px;
     position: relative;
-    right: 23px;
+    right: 0;
     margin: 0;
     padding: 0;
     display: block;
@@ -198,7 +198,6 @@
 
     .mobile-navigation__btn {
         width: 28px;
-        right: 30px;
 
     }
 
