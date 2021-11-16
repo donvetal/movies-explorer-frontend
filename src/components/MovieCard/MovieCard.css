@@ -17,6 +17,7 @@
     position: relative;
     box-sizing: border-box;
 
+
 }
 
 .movie__title {
@@ -26,6 +27,10 @@
     font-weight: 500;
     padding: 0 0 9px 0;
     margin: 0;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
 }
 
@@ -97,5 +102,7 @@
     padding: 0;
     object-fit: cover;
     object-position: 50% 50%;
+    width: 100%;
 }
+
 
