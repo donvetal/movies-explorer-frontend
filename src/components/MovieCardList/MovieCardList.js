@@ -2,21 +2,24 @@
 import React from "react";
 import './MovieCardList.css';
 import MovieCard from "../MovieCard/MovieCard";
-import {allMovies} from "../../utils/constants";
+// import {allMovies} from "../../utils/constants";
 
 
-function MovieCardList() {
+function MovieCardList(props) {
+  const movies = props.movies || [];
 
 
   return (
 
     <ul className="movies__list">
-      {allMovies.map((movie) => <MovieCard
+      {movies && movies.map((movie) => <MovieCard
+        card={movie}
+        key={movie.id}
         moviesCardsListType="general"
         isMovieCardSelect={movie.isMovieCardSelect}
-        image={movie.image}
-        text={movie.text}
-        time={movie.time}
+        // image={movie.image}
+        // text={movie.text}
+        // time={movie.time}
       />)}
 
     </ul>

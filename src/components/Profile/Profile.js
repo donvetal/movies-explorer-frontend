@@ -3,7 +3,7 @@ import React, {useContext} from "react";
 import './Profile.css';
 import Header from "../Header/Header";
 import {useFormWithValidation} from "../../hooks/useFormWithValidation";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
   const {onSignOut, loggedIn, onUpdateProfile, message} = props;

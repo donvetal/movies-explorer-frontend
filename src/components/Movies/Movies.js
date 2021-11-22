@@ -8,16 +8,19 @@ import Preloader from "../Preloader/Preloader";
 import MovieCardList from "../MovieCardList/MovieCardList";
 
 function Movies(props) {
-  const {loggedIn} =props;
-  const isLoading = false;
+  const {loggedIn, searchMovie, movies, isLoading, message} =props;
+  // const isLoading = false;
   return (
     <section className="movies">
       <Header loggedIn={loggedIn}/>
-      <SearchForm/>
+      <SearchForm searchMovie={searchMovie}/>
       {
         isLoading ? (<Preloader/>) : (
           <>
-            <MovieCardList moviesCardsListType="general"/>
+            <MovieCardList moviesCardsListType="general"
+                           movies={movies}
+                           message={message}
+                           isLoading={isLoading}/>
             <button type="button" className="movies__button">Ещё</button>
           </>
         )}

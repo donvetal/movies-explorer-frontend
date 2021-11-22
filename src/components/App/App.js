@@ -2,7 +2,7 @@ import './App.css';
 import React, {useEffect, useCallback} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Main from "../Main/Main";
-import {CurrentUserContext} from "../../contexts/CurrentUserContext";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Movies from "../Movies/Movies";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
@@ -23,6 +23,9 @@ function App(props) {
   const [messageErr, setMessageErr] = React.useState(null);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [registered, setRegistered] = React.useState(false);
+  const [movies, setMovies] = React.useState([]);
+  const [foundMovies, setFoundMovies] = React.useState([]);
+  const [isMoviesLoading, setIsMoviesLoading] = React.useState(false);
   // const [isAuthChecking, setIsAuthChecking] = React.useState(true);
 
 
@@ -51,9 +54,11 @@ function App(props) {
   useEffect(() => {
 
     moviesApi.getMoviesList()
-      .then((data) => {
-        setCurrentUser(data);
-        console.log(data);
+      .then((res) => {
+        localStorage.setItem("movies", JSON.stringify(res || []));
+        setMovies(res || []);
+        setIsMoviesLoading(false);
+        console.log(res);
       })
       .catch(error => {
         console.log((error));
@@ -154,15 +159,33 @@ function App(props) {
 
 
 
-  const handleUpdateProfile = (currentUser) => {
-    mainApi.updateProfile(currentUser.email, currentUser.name)
+  const handleUpdateProfile = ({name, email}) => {
+    console.log('name' + name)
+    mainApi.updateProfile(name, email)
       .then(({data}) => {
         setCurrentUser(data);
+        console.log(">>>" + data)
     })
       .catch(error => {
         console.log(error);
         setMessageErr(error);
       })
+  }
+
+  // функция поиска фильма
+  function handleMovieSearch(query) {
+    const searchTerm = query.toLowerCase();
+
+    const movieSearchResult = movies.filter((item) => {
+      return item.nameRU.toLowerCase().includes(searchTerm);
+    });
+    if (movieSearchResult.length === 0) {
+      setMessageErr("Фильмы не найдены");
+      setFoundMovies([]);
+    } else {
+      setFoundMovies(movieSearchResult);
+      setMessageErr("");
+    }
   }
 
 
@@ -179,7 +202,11 @@ function App(props) {
             <Main loggedIn={loggedIn}/>
           </Route>
           <Route path="/movies">
-            <Movies loggedIn={loggedIn} onSignOut/>
+            <Movies loggedIn={loggedIn}
+                    movies={foundMovies}
+                    isLoading={isMoviesLoading}
+                    message={messageErr}
+                    searchMovie={handleMovieSearch}/>
           </Route>
           <Route path="/saved-movies">
             <SavedMovies loggedIn={loggedIn}/>
