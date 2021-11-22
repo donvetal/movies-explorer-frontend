@@ -10,9 +10,9 @@ export class MainApi {
   authorize = (password, email) =>
     this._fetch('POST', 'include', '/signin', {password, email});
 
-  logout = () => this._fetch('GET', 'include', '/logout');
+  logout = () => this._fetch('GET', 'include', '/signout');
 
-  checkAuth = () => this._fetch('GET', 'include', '/signout');
+  checkAuth = () => this._fetch('GET', 'include', '/check-auth');
 
   getProfile = () => this._fetch('GET', 'include', '/users/me');
 

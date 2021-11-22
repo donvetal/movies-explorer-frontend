@@ -87,15 +87,17 @@
     margin: 0;
     padding: 6px 0;
     height: 12px;
+    text-align: start;
 
 }
 
 .register__input-error:last-of-type {
-    padding-bottom: 0;
+    margin-top: 104px;
+
 }
 
 .register__btn {
-    margin: 134px auto 0;
+    margin: 0 auto;
     padding: 13px 0 15px;
     width: 100%;
     background-color: #000000;
@@ -115,9 +117,9 @@
 
 .register__btn:disabled {
     background-color: #F8F8F8;
-    color: black;
+    color: #A0A0A0;
     cursor: not-allowed;
-    border: 1px solid black;
+    border-style: none;
 }
 
 .register__text {
@@ -176,8 +178,11 @@
 
     }
 
+    .register__input-error:last-of-type {
+        margin-top: 192px;
+    }
+
     .register__btn {
-        margin-top: 222px;
         padding-top: 15px;
         padding-bottom: 15px;
         font-size: 12px;

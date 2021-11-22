@@ -7,11 +7,12 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MovieCardList from "../MovieCardList/MovieCardList";
 
-function Movies() {
+function Movies(props) {
+  const {loggedIn} =props;
   const isLoading = false;
   return (
     <section className="movies">
-      <Header/>
+      <Header loggedIn={loggedIn}/>
       <SearchForm/>
       {
         isLoading ? (<Preloader/>) : (

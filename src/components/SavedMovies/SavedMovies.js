@@ -5,10 +5,11 @@ import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
 import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 
-function SavedMovies() {
+function SavedMovies(props) {
+  const {loggedIn} = props;
   return (
     <section className="saved-movies">
-      <Header/>
+      <Header loggedIn={loggedIn}/>
       <SearchForm/>
       <SavedMoviesCardList moviesCardsListType="saved"/>
       <Footer/>
