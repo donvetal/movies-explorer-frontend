@@ -3,23 +3,27 @@ import React from 'react';
 import './SearchForm.css';
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
-function SearchForm({searchMovie}) {
-  const [searchTerm, setSearchTerm] = React.useState("");
+function SearchForm({searchMovies, setIsChecked}) {
+  const [searchKeyWord, setSearchKeyWord] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [isShortMovies, setIsShortMovies] = React.useState(false);
 
   function onChange(e) {
-    setSearchTerm(e.target.value);
+    setSearchKeyWord(e.target.value);
+  }
+
+  function handleToggleCheckbox(checked) {
+    setIsShortMovies(checked);
+    setIsChecked(!isShortMovies);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (!searchTerm) {
+    if (!searchKeyWord) {
       setErrorMessage("Нужно ввести ключевое слово");
       return;
     }
-
-    searchMovie(searchTerm);
+    searchMovies(searchKeyWord);
   }
 
   return (
@@ -28,13 +32,14 @@ function SearchForm({searchMovie}) {
             onSubmit={handleSubmit}>
         <input type="text"
                id="header-search"
-               value={searchTerm}
+               value={searchKeyWord}
                onChange={onChange}
                minLength="1"
                maxLength="200"
                placeholder="Фильм"
                name="movies"
                className="search-form__input"
+               autoComplete="off"
                required/>
         <div className="search-form__container">
           <p className="search__input_error">{errorMessage}</p>
@@ -44,7 +49,7 @@ function SearchForm({searchMovie}) {
 
 
       </form>
-      <FilterCheckbox/>
+      <FilterCheckbox onCheckboxToggle={handleToggleCheckbox}/>
 
     </section>
   );

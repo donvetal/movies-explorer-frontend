@@ -8,20 +8,43 @@ import SearchForm from "../SearchForm/SearchForm";
 import MovieCardList from "../MovieCardList/MovieCardList";
 
 function Movies(props) {
-  const {loggedIn, searchMovie, movies, isLoading, message, isSearching} =props;
-  // const isLoading = false;
+  const {
+    saveMovie,
+    savedMoviesIds,
+    loggedIn,
+    movies,
+    isLoading,
+    message,
+    isSearching,
+    findShortMovies,
+    searchMovies
+
+  } = props;
+
+
+  const [shortMovies, setShortMovies] = React.useState([]);
+  const [isChecked, setIsChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isChecked) {
+      setShortMovies(findShortMovies(movies));
+    }
+  }, [isChecked, movies]);
+
+
   return (
     <section className="movies">
       <Header loggedIn={loggedIn}/>
-      <SearchForm searchMovie={searchMovie}/>
+      <SearchForm searchMovies={searchMovies} setIsChecked={setIsChecked}/>
       {isSearching ? (
-          <>
-            <MovieCardList moviesCardsListType="general"
-                           movies={movies}
-                           message={message}
-                           isLoading={isLoading}/>
-            {/*<button type="button" className="movies__button">Ещё</button>*/}
-          </>
+
+        <MovieCardList moviesCardsListType="general"
+                       movies={isChecked ? shortMovies : movies}
+                       message={message}
+                       saveMovie={saveMovie}
+                       savedMoviesIds={savedMoviesIds}
+                       isLoading={isLoading}/>
+
       ) : (
         <p className="movies__info">«Ничего не найдено»</p>
       )}

@@ -1,26 +1,36 @@
 //MoviesCard — компонент одной карточки фильма.
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import './MovieCard.css';
-import {MOVIES_IMAGE_URL} from "../../utils/constants"
+import {MOVIES_IMAGE_URL} from "../../utils/constants";
 
 
 function MovieCard(props) {
 
-  const {moviesCardsListType, isMovieCardSelect, card} = props;
-  const [isSelect, setIsSelect] = useState(isMovieCardSelect);
+  const {moviesCardsListType, saveMovie, savedMoviesIds, card, deleteMovie} = props;
+  const [isSelect, setIsSelect] = useState(false);
 
 
   const hours = Math.floor(card.duration / 60);
   const minutes = card.duration - hours * 60;
   const durationStr = hours ? `${hours}ч ${minutes}м` : `${minutes}мин`;
 
-  const handleSelectClick = () => {
-    setIsSelect(!isSelect);
+  const handleSave = () => {
+    saveMovie(card);
+  };
+  const handleDelete = () => {
+    deleteMovie(card.movieId);
   };
 
   const handleClickImg = () => {
     window.open(card.trailerLink);
   };
+
+  useEffect(() => {
+    return savedMoviesIds && savedMoviesIds.includes(card.movieId)
+      ? setIsSelect(true)
+      : setIsSelect(false);
+  }, [savedMoviesIds, card.movieId]);
+
 
   return (
     <>
@@ -30,12 +40,13 @@ function MovieCard(props) {
           <p className="movie__time">{durationStr}</p>
           {moviesCardsListType === "general" ? (
             <button
-              onClick={handleSelectClick}
+              onClick={!isSelect ? handleSave : handleDelete}
               type="button"
               className={`movie__btn-select ${isSelect ? "movie__btn-select_active" : ""}`}/>
           ) : (
             <button
               type="button"
+              onClick={handleDelete}
               className="movie__btn-delete"/>
           )}
 

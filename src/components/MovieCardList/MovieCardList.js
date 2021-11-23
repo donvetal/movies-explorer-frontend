@@ -9,7 +9,7 @@ import {renderCardsNumber} from "../../utils/constants";
 
 
 function MovieCardList(props) {
-  const {isLoading} = props;
+  const {isLoading, saveMovie,  deleteMovie, savedMoviesIds, moviesCardsListType} = props;
   const movies = props.movies || [];
 
 
@@ -63,10 +63,14 @@ function MovieCardList(props) {
                 moviesToRender.length < displayedCardsNumber &&
                 moviesToRender.push(
                   <MovieCard
+                    movie={movie}
+                    saveMovie={saveMovie}
+                    savedMoviesIds={savedMoviesIds}
                     key={movie.id}
                     card={movie}
-                    moviesCardsListType="general"
-                    isMovieCardSelect={movie.isMovieCardSelect}
+                    deleteMovie={deleteMovie}
+                    moviesCardsListType={moviesCardsListType}
+                    // isMovieCardSelect={movie.isMovieCardSelect}
                   />
                 );
 

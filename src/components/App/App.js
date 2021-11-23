@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useEffect, useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Main from "../Main/Main";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
@@ -16,7 +16,6 @@ import successImg from '../../images/info-tooltip-success.svg';
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 
-
 function App(props) {
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -29,13 +28,17 @@ function App(props) {
   const [isSearching, setIsSearching] = React.useState(false);
   // const [isAuthChecking, setIsAuthChecking] = React.useState(true);
 
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState([]);
+  const [savedMovieIds, setSavedMovieIds] = React.useState([]);
+
 
   const successfulAuth = useCallback(() => {
     setLoggedIn(true);
     mainApi.getProfile()
       .then(({data}) => {
         if (!data) throw new Error(`Error: ${data.message}`);
-        setCurrentUser(data)
+        setCurrentUser(data);
         // setEmail({email: data.email})
         // api.getCardList()
         //   .then(({data}) => {
@@ -45,10 +48,10 @@ function App(props) {
         //       setLoggedIn(true);
         //       props.history.push('/');
         //     // }
-          })
-          .catch(error => {
-            console.log(error);
-          });
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
   });
 
@@ -113,7 +116,6 @@ function App(props) {
   };
 
 
-
   // Проверка авторизации пользователя
   // useEffect(() => {
   //   setIsAuthChecking(true);
@@ -156,25 +158,29 @@ function App(props) {
   };
 
 
-
-
-
-
   const handleUpdateProfile = ({name, email}) => {
-    console.log('name' + name)
+    console.log('name' + name);
     mainApi.updateProfile(name, email)
       .then(({data}) => {
         setCurrentUser(data);
-        console.log(">>>" + data)
-    })
+        console.log(">>>" + data);
+      })
       .catch(error => {
         console.log(error);
         setMessageErr(error);
-      })
+      });
+  };
+
+
+  function findShortMovies(movies) {
+    const shortMoviesArray = movies.filter(
+      (movie) => movie.duration <= 40
+    );
+    return shortMoviesArray;
   }
 
   // функция поиска фильма
-  function handleMovieSearch(query) {
+  function handleMoviesSearch(query) {
     setIsMoviesLoading(true);
     setIsSearching(true);
     const searchTerm = query.toLowerCase();
@@ -194,6 +200,39 @@ function App(props) {
     }
   }
 
+  const handleSaveMovie = (movie) => {
+    mainApi.setProfileMovie(movie)
+      .then((savedMovie) => {
+        localStorage.setItem(
+          "savedMovies",
+          JSON.stringify([savedMovie, ...savedMovies])
+        );
+        setSavedMovies([savedMovie, ...savedMovies]);
+        setSearchedSavedMovies([savedMovie, ...savedMovies]);
+        setSavedMovieIds([...savedMovieIds, savedMovie.movieId]);
+      })
+      .catch((err) => {
+        setMessageErr(err);
+      });
+  };
+
+  const handleDeleteMovie = ({movieId}) => {
+    mainApi.deleteProfileMovie(movieId)
+      .then(() => {
+        localStorage.setItem(
+          "savedMovies",
+          JSON.stringify(savedMovies.filter((movie) => movie.movieId !== movieId))
+        );
+
+        setSavedMovies(savedMovies.filter((movie) => movie.movieId !== movieId));
+        setSearchedSavedMovies(savedMovies.filter((movie) => movie.movieId !== movieId));
+        setSavedMovieIds(savedMovieIds.filter((id) => id !== movieId));
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+  };
+
 
   // console.log('isAuthChecking:  ' + isAuthChecking);
   console.log('isInfoTooltipOpen:  ' + isInfoTooltipOpen);
@@ -210,13 +249,22 @@ function App(props) {
           <Route path="/movies">
             <Movies loggedIn={loggedIn}
                     movies={foundMovies}
+                    saveMovie={handleSaveMovie}
+                    savedMoviesIds={savedMovieIds}
                     isLoading={isMoviesLoading}
                     isSearching={isSearching}
+                    findShortMovies={findShortMovies}
+                    deleteMovie={handleDeleteMovie}
                     message={messageErr}
-                    searchMovie={handleMovieSearch}/>
+                    searchMovies={handleMoviesSearch}/>
           </Route>
           <Route path="/saved-movies">
-            <SavedMovies loggedIn={loggedIn}/>
+            <SavedMovies loggedIn={loggedIn}
+                         searchMovies={handleMoviesSearch}
+                         deleteMovie={handleDeleteMovie}
+                         findShortMovies={findShortMovies}
+                         isLoading={isMoviesLoading}
+                         movies={searchedSavedMovies}/>
           </Route>
           <Route path="/signup">
 
