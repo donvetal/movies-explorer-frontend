@@ -26,6 +26,7 @@ function App(props) {
   const [movies, setMovies] = React.useState([]);
   const [foundMovies, setFoundMovies] = React.useState([]);
   const [isMoviesLoading, setIsMoviesLoading] = React.useState(false);
+  const [isSearching, setIsSearching] = React.useState(false);
   // const [isAuthChecking, setIsAuthChecking] = React.useState(true);
 
 
@@ -174,17 +175,22 @@ function App(props) {
 
   // функция поиска фильма
   function handleMovieSearch(query) {
+    setIsMoviesLoading(true);
+    setIsSearching(true);
     const searchTerm = query.toLowerCase();
-
     const movieSearchResult = movies.filter((item) => {
       return item.nameRU.toLowerCase().includes(searchTerm);
     });
     if (movieSearchResult.length === 0) {
       setMessageErr("Фильмы не найдены");
       setFoundMovies([]);
+      // setIsMoviesLoading(false);
+      setIsSearching(false);
     } else {
       setFoundMovies(movieSearchResult);
       setMessageErr("");
+      setIsMoviesLoading(false);
+
     }
   }
 
@@ -205,6 +211,7 @@ function App(props) {
             <Movies loggedIn={loggedIn}
                     movies={foundMovies}
                     isLoading={isMoviesLoading}
+                    isSearching={isSearching}
                     message={messageErr}
                     searchMovie={handleMovieSearch}/>
           </Route>

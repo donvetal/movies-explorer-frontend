@@ -27,3 +27,13 @@ export const allMovies = [{image: movieImage1, isMovieCardSelect: false, text: "
 export const savedMovies = [{image: movieImage1, text: "33 слова о дизайне", time: "1ч 47м"},
   {image: movieImage2, text: "33 слова о дизайне", time: "1ч 47м"},
   {image: movieImage3, text: "33 слова о дизайне", time: "1ч 47м"}];
+
+export const MOVIES_IMAGE_URL = 'https://api.nomoreparties.co';
+
+export const renderCardsNumber = {
+  windowSizeXS: 2,
+  windowSizeS: 3,
+  windowSizeM: 5,
+  windowSizeL: 8,
+  windowSizeXL: 12,
+};

@@ -30,7 +30,7 @@ function SearchForm({searchMovie}) {
                id="header-search"
                value={searchTerm}
                onChange={onChange}
-               minLength="2"
+               minLength="1"
                maxLength="200"
                placeholder="Фильм"
                name="movies"
