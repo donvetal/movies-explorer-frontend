@@ -16,8 +16,8 @@ export class MainApi {
 
   getProfile = () => this._fetch('GET', 'include', '/users/me');
 
-  updateProfile = (email, name) =>
-    this._fetch('PATCH', 'include', '/users/me', {email, name});
+  updateProfile = (name, email) =>
+    this._fetch('PATCH', 'include', '/users/me', {name, email});
 
   getProfileMovies = () => this._fetch('GET', 'include', '/movies');
 
@@ -77,7 +77,8 @@ export class MainApi {
 }
 
 const mainApi = new MainApi({
-  url: 'https://api.kino-explorer.nomoredomains.club',
+  url: 'http://localhost:3001',
+  // url: 'https://api.kino-explorer.nomoredomains.club',
   headers: {
     'Content-type': 'application/json'
   }

@@ -7,7 +7,21 @@ import {MOVIES_IMAGE_URL} from "../../utils/constants";
 function MovieCard(props) {
 
   const {moviesCardsListType, saveMovie, savedMoviesIds, card, deleteMovie} = props;
-  const [isSelect, setIsSelect] = useState(false);
+
+  const {
+    country,
+    director,
+    year,
+    description,
+    image,
+    thumbnail,
+    nameRU,
+    nameEN,
+    duration,
+    trailer,
+    movieId,
+  } = card;
+  const [isSelect, setIsSelect] = useState(true);
 
 
   const hours = Math.floor(card.duration / 60);
@@ -15,7 +29,19 @@ function MovieCard(props) {
   const durationStr = hours ? `${hours}ч ${minutes}м` : `${minutes}мин`;
 
   const handleSave = () => {
-    saveMovie(card);
+    saveMovie({
+        country: country || 'Данные отсутствуют',
+        director: director || 'Данные отсутствуют',
+        duration: duration || 0,
+        year: year || 'Данные отсутствуют',
+        description: description || '',
+        image: image || 'https://unsplash.com/photos/49uySSA678U',
+        trailer: trailer || 'https://youtube.com',
+        thumbnail: thumbnail || 'https://unsplash.com/photos/49uySSA678U',
+        nameRU: nameRU || 'Данные отсутствуют',
+        nameEN: nameEN || 'Данные отсутствуют',
+        movieId,
+    });
   };
   const handleDelete = () => {
     deleteMovie(card.movieId);

@@ -63,7 +63,6 @@ function MovieCardList(props) {
                 moviesToRender.length < displayedCardsNumber &&
                 moviesToRender.push(
                   <MovieCard
-                    movie={movie}
                     saveMovie={saveMovie}
                     savedMoviesIds={savedMoviesIds}
                     key={movie.id}

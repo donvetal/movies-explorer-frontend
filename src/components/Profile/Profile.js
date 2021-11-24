@@ -1,5 +1,5 @@
 //Profile — компонент страницы изменения профиля.
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import './Profile.css';
 import Header from "../Header/Header";
 import {useFormWithValidation} from "../../hooks/useFormWithValidation";
@@ -8,14 +8,31 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 function Profile(props) {
   const {onSignOut, loggedIn, onUpdateProfile, message} = props;
   const currentUser = useContext(CurrentUserContext);
+
+
+
+
+  console.log(">>Profile Current user data    " + currentUser);
+  console.log(">>Profile Current name   " + currentUser.name);
+  console.log(">>Profile Current email   " + currentUser.email);
+
   const {values, handleChange, resetForm, errors, isValid} =
     useFormWithValidation();
 
+  useEffect(() => {
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {email, name} = values;
-    onUpdateProfile({email, name});
-    resetForm();
+    const {name, email} = values;
+    console.log(">>>>> New profile name:  " + name);
+    console.log(">>>>> New profile name:  " + email);
+    onUpdateProfile({email, name})
   };
 
   return (
@@ -29,13 +46,14 @@ function Profile(props) {
           <div className="profile__input-container">
             <label className="profile__input-label" htmlFor="profile-name">Имя</label>
             <input onChange={handleChange}
-                   value={values.name || currentUser.name}
+                   value={values.name || currentUser.name }
                    pattern="^[а-яА-ЯёЁa-zA-Z0-9]+$"
                    className="profile__input"
                    placeholder="Имя"
                    type="text"
                    name="name"
                    id="profile-name"
+                   autoComplete="off"
                    minLength="2"
                    maxLength="40"
                    required/>
@@ -53,6 +71,7 @@ function Profile(props) {
                    type="email"
                    name="email"
                    id="profile-email"
+                   autoComplete="off"
                    minLength="5"
                    maxLength="40"
                    required/>

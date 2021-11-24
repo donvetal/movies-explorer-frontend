@@ -17,8 +17,7 @@ function FilterCheckbox(props) {
              htmlFor="search-form__toggle-switch"
       >
         <input type="checkbox"
-               defaultChecked={true}
-               checked={isChecked}
+               defaultChecked={isChecked}
                onChange={(e) => onToggle(e)}
                className="search-form__toggle-switch-checkbox"
                name="search-form__toggle-switch"

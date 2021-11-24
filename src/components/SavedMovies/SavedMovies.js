@@ -4,11 +4,12 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import SearchForm from "../SearchForm/SearchForm";
 import MovieCardList from "../MovieCardList/MovieCardList";
+// import Movies from "../Movies/Movies";
 
 // import SavedMoviesCardList from "../SavedMoviesCardList/SavedMoviesCardList";
 
 function SavedMovies(props) {
-  const {loggedIn, movies, searchMovies, deleteMovie, isLoading, findShortMovies} = props;
+  const {loggedIn, movies, searchMovies, deleteMovie, isLoading, findShortMovies, savedMoviesIds, isSearching} = props;
 
 
   const [shortMovies, setShortMovies] = React.useState([]);
@@ -23,11 +24,17 @@ function SavedMovies(props) {
   return (
     <section className="saved-movies">
       <Header loggedIn={loggedIn}/>
-      <SearchForm searchMovie={searchMovies} setIsChecked={setIsChecked}/>
+      <SearchForm searchMovies={searchMovies} setIsChecked={setIsChecked}/>
+
+      {isSearching ? (
       <MovieCardList moviesCardsListType="saved"
                      movies={isChecked ? shortMovies : movies}
                      deleteMovie={deleteMovie}
+                     savedMoviesIds={savedMoviesIds}
                      isLoading={isLoading}/>
+      ) : (
+        <p className="movies__info">«Ничего не найдено»</p>
+      )}
       <Footer/>
     </section>
   );
