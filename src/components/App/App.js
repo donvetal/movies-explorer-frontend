@@ -115,7 +115,7 @@ function App(props) {
         if (res.hasOwnProperty('error')) {
           setRegistered(false);
         } else {
-          handleLogin({password, email})
+          handleLogin({password, email});
           setIsAuthChecking(false);
           successfulAuth();
           setMessageErr("");
