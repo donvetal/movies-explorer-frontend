@@ -109,14 +109,14 @@ function App(props) {
   };
 
   const handleRegister = ({password, email, name}) => {
+    setIsAuthChecking(true);
     mainApi.register(password, email, name)
       .then((res) => {
         if (res.hasOwnProperty('error')) {
-          console.log("NOT REGISTRETED");
           setRegistered(false);
         } else {
-          setLoggedIn(true);
-          console.log("REGISTRETED");
+          handleLogin({password, email})
+          setIsAuthChecking(false);
           successfulAuth();
           setMessageErr("");
           setRegistered(true);

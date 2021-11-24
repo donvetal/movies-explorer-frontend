@@ -22,6 +22,7 @@ export class MainApi {
   getProfileMovies = () => this._fetch('GET', 'include', '/movies');
 
 
+
   setProfileMovie = (movie) =>
     this._fetch(
       'POST',
@@ -55,8 +56,8 @@ export class MainApi {
 }
 
 const mainApi = new MainApi({
-
-  url: 'https://api.kino-explorer.nomoredomains.club',
+  url: 'http://localhost:3001',
+  // url: 'https://api.kino-explorer.nomoredomains.club',
   headers: {
     'Content-type': 'application/json'
   }
