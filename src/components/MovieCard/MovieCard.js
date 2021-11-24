@@ -1,5 +1,5 @@
 //MoviesCard — компонент одной карточки фильма.
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import './MovieCard.css';
 import {MOVIES_IMAGE_URL} from "../../utils/constants";
 
@@ -21,7 +21,7 @@ function MovieCard(props) {
     trailer,
     movieId,
   } = card;
-  const [isSelect, setIsSelect] = useState(true);
+  const [isSelect, setIsSelect] = useState(false);
 
 
   const hours = Math.floor(card.duration / 60);
@@ -30,17 +30,18 @@ function MovieCard(props) {
 
   const handleSave = () => {
     saveMovie({
-        country: country || 'Данные отсутствуют',
-        director: director || 'Данные отсутствуют',
-        duration: duration || 0,
-        year: year || 'Данные отсутствуют',
-        description: description || '',
-        image: image || 'https://unsplash.com/photos/49uySSA678U',
-        trailer: trailer || 'https://youtube.com',
-        thumbnail: thumbnail || 'https://unsplash.com/photos/49uySSA678U',
-        nameRU: nameRU || 'Данные отсутствуют',
-        nameEN: nameEN || 'Данные отсутствуют',
-        movieId,
+      country: country || 'Данные отсутствуют',
+      director: director || 'Данные отсутствуют',
+      duration: duration || 0,
+      year: year || 'Данные отсутствуют',
+      description: description || '',
+      image: image || 'https://yandex.ru/images/search?text=%D0%9B%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA&nl=1&source=morda',
+      trailer: trailer || 'https://youtube.com',
+      thumbnail: thumbnail || 'https://yandex.ru/images/search?text' +
+        '=%D0%9B%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA&nl=1&source=morda',
+      nameRU: nameRU || 'Данные отсутствуют',
+      nameEN: nameEN || 'Данные отсутствуют',
+      movieId,
     });
   };
   const handleDelete = () => {
@@ -77,12 +78,7 @@ function MovieCard(props) {
           )}
 
         </div>
-        {/*<a*/}
-        {/*  href={props.card.trailer}*/}
-        {/*  target="_blank"*/}
-        {/*  rel="noreferrer"*/}
-        {/*  className="movie__link"*/}
-        {/*> </a>*/}
+
         <img onClick={handleClickImg} className="movie__image" src={`${MOVIES_IMAGE_URL}${card.image.url}`}
              alt={`Кадр из фильма ${card.nameRU}`}/>
 

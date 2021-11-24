@@ -19,10 +19,12 @@ function SearchForm({searchMovies, setIsChecked}) {
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log("step1")
     if (!searchKeyWord) {
       setErrorMessage("Нужно ввести ключевое слово");
       return;
     }
+    console.log("step2")
     searchMovies(searchKeyWord);
   }
 

@@ -21,35 +21,13 @@ export class MainApi {
 
   getProfileMovies = () => this._fetch('GET', 'include', '/movies');
 
-  setProfileMovie = (
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailer,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN) =>
+
+  setProfileMovie = (movie) =>
     this._fetch(
       'POST',
       'include',
       '/movies',
-      {
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailer,
-        thumbnail,
-        movieId,
-        nameRU,
-        nameEN
-      });
+      movie);
 
   deleteProfileMovie = (movieId) => this._fetch('DELETE', 'include', '/movies/' + movieId);
 
@@ -77,8 +55,8 @@ export class MainApi {
 }
 
 const mainApi = new MainApi({
-  url: 'http://localhost:3001',
-  // url: 'https://api.kino-explorer.nomoredomains.club',
+
+  url: 'https://api.kino-explorer.nomoredomains.club',
   headers: {
     'Content-type': 'application/json'
   }

@@ -49,6 +49,7 @@ function Register(props) {
                id="register-email"
                minLength="5"
                maxLength="40"
+               autoComplete="off"
                required/>
         <span className="register__input-error" id="register-input-email-error">{errors.email}</span>
 
@@ -62,6 +63,7 @@ function Register(props) {
                id="register-password"
                minLength="8"
                maxLength="200"
+               autoComplete="off"
                required/>
         <span className="register__input-error" id="register-input-password-error">{errors.password}</span>
         <span  className="register__input-error">{props.message}</span>

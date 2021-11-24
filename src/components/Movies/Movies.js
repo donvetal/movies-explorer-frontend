@@ -4,7 +4,6 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import './Movies.css';
 import SearchForm from "../SearchForm/SearchForm";
-// import Preloader from "../Preloader/Preloader";
 import MovieCardList from "../MovieCardList/MovieCardList";
 
 function Movies(props) {
@@ -29,7 +28,7 @@ function Movies(props) {
     if (isChecked) {
       setShortMovies(findShortMovies(movies));
     }
-  }, [isChecked, movies]);
+  }, [isChecked, movies, findShortMovies]);
 
 
   return (

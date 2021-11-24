@@ -3,7 +3,6 @@ import React, {useCallback, useEffect} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import Main from "../Main/Main";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
-import Movies from "../Movies/Movies";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Profile from "../Profile/Profile";
@@ -14,6 +13,10 @@ import mainApi from "../../utils/MainApi";
 import fail from '../../images/info-tooltip-fail.svg';
 import successImg from '../../images/info-tooltip-success.svg';
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Movies from "../Movies/Movies";
+import {MOVIES_IMAGE_URL} from "../../utils/constants";
+import * as utils from '../../utils/utils';
 
 
 function App(props) {
@@ -23,28 +26,17 @@ function App(props) {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [registered, setRegistered] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
-  const [foundMovies, setFoundMovies] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isSearching, setIsSearching] = React.useState(false);
   const [isAuthChecking, setIsAuthChecking] = React.useState(true);
 
   const [savedMovies, setSavedMovies] = React.useState([]);
+  const [searchedMovies, setSearchedMovies] = React.useState([]);
   const [searchedSavedMovies, setSearchedSavedMovies] = React.useState([]);
   const [savedMovieIds, setSavedMovieIds] = React.useState([]);
 
-  useEffect(() => {
+  const [searchValue, setSearchValue] = React.useState({});
 
-    moviesApi.getMoviesList()
-      .then((res) => {
-        localStorage.setItem("movies", JSON.stringify(res || []));
-        setMovies(res || []);
-        setIsLoading(false);
-        console.log(res);
-      })
-      .catch(error => {
-        console.log((error));
-      });
-  }, []);
 
   const successfulAuth = useCallback(() => {
     setLoggedIn(true);
@@ -52,23 +44,30 @@ function App(props) {
 
     mainApi.getProfile()
       .then(({data}) => {
-        console.log(">>currentUser" + {data})
+        console.log(">>currentUser" + {data});
         if (!data) throw new Error(`Error: ${data.message}`);
         setCurrentUser(data);
-        // mainApi.getProfileMovies()
-        //   .then(({data}) => {
-        //     if (!data) throw new Error(`Error: ${data.message}`);
-        //     if ((data)) {
-        //       setCards(data);
-        //       setLoggedIn(true);
-        //       props.history.push('/');
-        //     }
+        moviesApi.getMoviesList()
+          .then((res) => {
+            localStorage.setItem("movies", JSON.stringify(res || []));
+            setMovies(res || []);
+            setIsLoading(false);
+            setLoggedIn(true);
+          });
+        mainApi.getProfileMovies()
+          .then((res) => {
+            console.log("profile movies >>> " + res.length);
+            localStorage.setItem("savedMovies", JSON.stringify(res || []));
+            setSavedMovies(res || []);
+
+          });
       })
       .catch(error => {
         console.log(error);
       });
 
   }, []);
+
 
   // Проверка авторизации пользователя
   useEffect(() => {
@@ -78,15 +77,15 @@ function App(props) {
       .then(res => {
         if (res) {
           successfulAuth();
+          setIsAuthChecking(false);
         }
       })
       .catch(() => {
         setIsAuthChecking(false);
-        // props.history.push('/');
+      })
+      .finally(() => {
+        setIsAuthChecking(false);
       });
-    // .finally(() => {
-    //   setIsAuthChecking(false);
-    // });
 
   }, [successfulAuth]);
 
@@ -96,13 +95,9 @@ function App(props) {
       .then((res) => {
         if (!res || res.statusCode === 400 || res.statusCode === 401) throw new Error(`Ошибка: ${res.message}`);
         if (res.message === 'Авторизация прошла успешно!') {
-          // setEmail({email: email});
-          setLoggedIn(true);
-          // successfulAuth();
+          successfulAuth();
         } else {
           setIsInfoTooltipOpen(true);
-          setLoggedIn(false);
-
         }
       })
       .catch(err => {
@@ -122,6 +117,7 @@ function App(props) {
         } else {
           setLoggedIn(true);
           console.log("REGISTRETED");
+          successfulAuth();
           setMessageErr("");
           setRegistered(true);
 
@@ -129,9 +125,6 @@ function App(props) {
         setIsInfoTooltipOpen(true);
       })
       .catch((err) => {
-        // if(error.statusCode === 409){
-        //   setMessageErr( "Пользователь с таким email уже существует");
-        // }
         console.log({err});
         setMessageErr(err);
         setIsInfoTooltipOpen(true);
@@ -140,12 +133,9 @@ function App(props) {
   };
 
   const handleUpdateProfile = ({name, email}) => {
-    console.log('name in App' + name);
-    console.log('name in App' + email);
     mainApi.updateProfile(name, email)
       .then((data) => {
         setCurrentUser(data);
-        console.log("!!!!!!!!APP data updateProfile" + data);
       })
       .catch(error => {
         console.log(error);
@@ -155,10 +145,6 @@ function App(props) {
 
   const onInfoTooltipClose = () => {
     setIsInfoTooltipOpen(false);
-    // if (registered) {
-    //   setTimeout(() => props.history.push("/signin"), 1000);
-    // }
-
   };
 
   // Выход из системы
@@ -174,9 +160,6 @@ function App(props) {
   };
 
 
-
-
-
   function findShortMovies(movies) {
     const shortMoviesArray = movies.filter(
       (movie) => movie.duration <= 40
@@ -184,71 +167,38 @@ function App(props) {
     return shortMoviesArray;
   }
 
-  // функция поиска фильма
-  function handleMoviesSearch(query) {
+
+  const searchMovies = (keyword, isCheckbox) => {
     setIsLoading(true);
     setIsSearching(true);
-    const searchTerm = query.toLowerCase();
-    const movieSearchResult = movies.filter((item) => {
-      return item.nameRU.toLowerCase().includes(searchTerm);
-    });
-    if (movieSearchResult.length === 0) {
-      setMessageErr("Фильмы не найдены");
-      setFoundMovies([]);
-      // setIsMoviesLoading(false);
-      setIsSearching(false);
-    } else {
-      setFoundMovies(movieSearchResult);
-      setMessageErr("");
+
+    try {
+      const filteredMovies = utils.searchByKeyword(movies, keyword, isCheckbox);
+      setSearchedMovies(filteredMovies);
+      setSearchValue({...searchValue, keyword: keyword});
+      localStorage.setItem('searchedMovies', JSON.stringify(filteredMovies));
+      localStorage.setItem('searchValue', JSON.stringify({isCheckbox, keyword}));
+    } catch (err) {
+      setMessageErr(err);
+    } finally {
       setIsLoading(false);
-
     }
-  }
+  };
 
 
-  const handleSaveMovie = (
-    {
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailer,
-      thumbnail,
-      movieId,
-      nameRU,
-      nameEN
-    }) => {
-    console.log("movieData:" + country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailer,
-      thumbnail,
-      movieId,
-      nameRU,
-      nameEN);
-    mainApi.setProfileMovie(country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailer,
-      thumbnail,
-      movieId,
-      nameRU,
-      nameEN)
+  const handleSaveMovie = (movie) => {
+    mainApi.setProfileMovie({
+      ...movie,
+      image: `${MOVIES_IMAGE_URL}${movie.image.url}`,
+      thumbnail: `${MOVIES_IMAGE_URL}${movie.image.formats.thumbnail.url}`,
+      movieId: movie.image.id
+    })
       .then((savedMovie) => {
-
         localStorage.setItem(
           "savedMovies",
           JSON.stringify([savedMovie, ...savedMovies])
         );
-        console.log("savedMovies: " + savedMovies);
+
         setSavedMovies([savedMovie, ...savedMovies]);
         setSearchedSavedMovies([savedMovie, ...savedMovies]);
         setSavedMovieIds([...savedMovieIds, savedMovie.movieId]);
@@ -258,45 +208,54 @@ function App(props) {
       });
   };
 
-  //функция поиска в сохраненных фильмах
-  function handleSavedMovieSearch(query) {
-    setIsSearching(true);
-    const searchTerm = query.toLowerCase();
-    if (searchTerm === "") {
-      setSearchedSavedMovies([]);
-      return;
+
+  // ---Функции поиска
+  const searchSavedMovies = (keyword, isCheckbox) => {
+    setIsLoading(true);
+
+    try {
+      const filteredMovies = utils.searchByKeyword(savedMovies, keyword, isCheckbox);
+      setSearchedSavedMovies(filteredMovies);
+    } catch (err) {
+      setMessageErr(err);
+    } finally {
+      setIsLoading(false);
     }
-    const savedMovieSearchResult = savedMovies.filter((item) => {
-      return item.nameRU.toLowerCase().includes(searchTerm);
-    });
-    if (savedMovieSearchResult.length === 0) {
-      setMessageErr("Фильмы не найдены");
-      setSearchedSavedMovies([]);
-    } else {
-      setSearchedSavedMovies(savedMovieSearchResult);
-    }
-  }
-
-
-  const handleDeleteMovie = ({movieId}) => {
-    mainApi.deleteProfileMovie(movieId)
-      .then(() => {
-        localStorage.setItem(
-          "savedMovies",
-          JSON.stringify(savedMovies.filter((movie) => movie.movieId !== movieId))
-        );
-
-        setSavedMovies(savedMovies.filter((movie) => movie.movieId !== movieId));
-        setSearchedSavedMovies(savedMovies.filter((movie) => movie.movieId !== movieId));
-        setSavedMovieIds(savedMovieIds.filter((id) => id !== movieId));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
 
-  // console.log('isAuthChecking:  ' + isAuthChecking);
+  const removeMovie = async ({movieId}) => {
+    try {
+      const removedMovie = await mainApi.deleteProfileMovie({movieId});
+
+      if (removedMovie.message === 'Фильм удалён') {
+        const filteredMovies = savedMovies.filter((movie) => movie.movieId !== movieId);
+        const filteredMoviesIds = savedMovieIds.filter((id) => id !== movieId);
+
+        setSavedMovies(filteredMovies);
+        setSavedMovieIds(filteredMoviesIds);
+        setSearchedSavedMovies(filteredMovies);
+      }
+
+      return;
+    } catch (err) {
+      setMessageErr(err.message);
+    }
+  };
+
+  // Проверка наличия данных в localStorage
+  useEffect(() => {
+    const localSearchMovies = localStorage.getItem('searchedMovies');
+    const localSearchValue = localStorage.getItem('searchValue');
+
+    if (loggedIn && localSearchValue && localSearchMovies) {
+      setSearchedMovies(JSON.parse(localSearchMovies));
+      setSearchValue(JSON.parse(localSearchValue));
+      setIsSearching(true);
+    }
+    return;
+  }, [loggedIn]);
+
   console.log("isAuthChecking:" + isAuthChecking);
   console.log("savedMovies: " + savedMovies);
   console.log('isInfoTooltipOpen:  ' + isInfoTooltipOpen);
@@ -310,28 +269,43 @@ function App(props) {
           <Route path="/" exact>
             <Main loggedIn={loggedIn}/>
           </Route>
-          <Route path="/movies">
-            <Movies loggedIn={loggedIn}
-                    movies={foundMovies}
-                    saveMovie={handleSaveMovie}
-                    savedMoviesIds={savedMovieIds}
-                    isLoading={isLoading}
-                    isSearching={isSearching}
-                    findShortMovies={findShortMovies}
-                    deleteMovie={handleDeleteMovie}
-                    message={messageErr}
-                    searchMovies={handleMoviesSearch}/>
-          </Route>
-          <Route path="/saved-movies">
-            <SavedMovies loggedIn={loggedIn}
-                         isSearching={isSearching}
-                         searchMovies={handleSavedMovieSearch}
-                         deleteMovie={handleDeleteMovie}
-                         findShortMovies={findShortMovies}
-                         isLoading={isLoading}
-                         savedMoviesIds={savedMovieIds}
-                         movies={searchedSavedMovies}/>
-          </Route>
+          <ProtectedRoute component={Movies}
+                          path="/movies"
+                          isChecking={isAuthChecking}
+                          loggedIn={loggedIn}
+                          movies={searchedMovies}
+                          saveMovie={handleSaveMovie}
+                          savedMoviesIds={savedMovieIds}
+                          isLoading={isLoading}
+                          isSearching={isSearching}
+                          findShortMovies={findShortMovies}
+                          deleteMovie={removeMovie}
+                          message={messageErr}
+                          searchMovies={searchMovies}/>
+
+
+          <ProtectedRoute component={SavedMovies}
+                          path="/saved-movies"
+                          isChecking={isAuthChecking}
+                          loggedIn={loggedIn}
+                          isSearching={isSearching}
+                          searchMovies={searchSavedMovies}
+                          deleteMovie={removeMovie}
+                          findShortMovies={findShortMovies}
+                          isLoading={isLoading}
+                          savedMoviesIds={savedMovieIds}
+                          movies={searchedSavedMovies}/>
+
+
+          <ProtectedRoute component={Profile}
+                          path="/profile"
+                          isChecking={isAuthChecking}
+                          loggedIn={loggedIn}
+                          onSignOut={handleSignOut}
+                          message={messageErr}
+                          onUpdateProfile={handleUpdateProfile}/>
+
+
           <Route path="/signup">
 
             {loggedIn ? (<Redirect to="movies"/>) : (<Register onRegister={handleRegister} message={messageErr}/>)}
@@ -342,13 +316,7 @@ function App(props) {
 
 
           </Route>
-          <Route path="/profile">
-            <Profile loggedIn={loggedIn}
-                     onSignOut={handleSignOut}
-                     message={messageErr}
-                     onUpdateProfile={handleUpdateProfile}/>
 
-          </Route>
           <Route path="*">
             <PageNotFound/>
           </Route>

@@ -5,11 +5,8 @@ import MovieCard from "../MovieCard/MovieCard";
 import Preloader from "../Preloader/Preloader";
 import {renderCardsNumber} from "../../utils/constants";
 
-// import {allMovies} from "../../utils/constants";
-
-
 function MovieCardList(props) {
-  const {isLoading, saveMovie,  deleteMovie, savedMoviesIds, moviesCardsListType} = props;
+  const {isLoading, saveMovie, deleteMovie, savedMoviesIds, moviesCardsListType,} = props;
   const movies = props.movies || [];
 
 
@@ -41,6 +38,7 @@ function MovieCardList(props) {
   }, [windowWidth]);
 
   useEffect(() => {
+
     renderCards();
   }, [renderCards]);
 
@@ -75,16 +73,6 @@ function MovieCardList(props) {
 
                 return moviesToRender;
               }, [])}
-
-              {/*{movies && movies.map((movie) => <MovieCard*/}
-              {/*  card={movie}*/}
-              {/*  key={movie.id}*/}
-              {/*  moviesCardsListType="general"*/}
-              {/*  isMovieCardSelect={movie.isMovieCardSelect}*/}
-              {/*  // image={movie.image}*/}
-              {/*  // text={movie.text}*/}
-              {/*  // time={movie.time}*/}
-              {/*/>)}*/}
 
             </ul>
             {!isLoading && movies.length > displayedCardsNumber && (

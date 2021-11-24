@@ -35,6 +35,7 @@ function Login(props) {
                id="login-email"
                minLength="5"
                maxLength="40"
+               autoComplete="off"
                required/>
         <span className="login__input-error" id="login-input-email-error">{errors.email}</span>
 
@@ -48,6 +49,7 @@ function Login(props) {
                id="login-password"
                minLength="8"
                maxLength="200"
+               autoComplete="off"
                required/>
         <span className="login__input-error" id="login-input-password-error">{errors.password}</span>
         <span className="login__input-error">{props.message}</span>
