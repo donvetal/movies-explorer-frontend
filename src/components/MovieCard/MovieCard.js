@@ -1,12 +1,12 @@
 //MoviesCard — компонент одной карточки фильма.
-import React, {useEffect, useState} from "react";
+import React, {useState, useEffect} from "react";
 import './MovieCard.css';
 import {MOVIES_IMAGE_URL} from "../../utils/constants";
 
 
 function MovieCard(props) {
 
-  const {moviesCardsListType, saveMovie, savedMoviesIds, card, deleteMovie} = props;
+  const {moviesCardsListType, saveMovie, card, deleteMovie, savedMoviesIds} = props;
 
   const {
     country,
@@ -29,6 +29,7 @@ function MovieCard(props) {
   const durationStr = hours ? `${hours}ч ${minutes}м` : `${minutes}мин`;
 
   const handleSave = () => {
+    console.log("Movie card save movieId 1    " + card.movieId)
     saveMovie({
       country: country || 'Данные отсутствуют',
       director: director || 'Данные отсутствуют',
@@ -43,9 +44,17 @@ function MovieCard(props) {
       nameEN: nameEN || 'Данные отсутствуют',
       movieId,
     });
+
+
   };
   const handleDelete = () => {
-    deleteMovie(card.movieId);
+    deleteMovie(card)
+    // deleteMovie(card);
+    // deleteMovie(moviesCardsListType === "general" ? (card.movieId) : (card._id));
+    console.log("From movie card >>>> card  " + JSON.stringify(card));
+    console.log("From movie card >>>> card._id  " + card._id);
+    console.log("From movie card >>>> card.id !!! " + card.id);
+    console.log("From movie card >>>> card.movieId  " + card.movieId);
   };
 
   const handleClickImg = () => {
@@ -53,11 +62,13 @@ function MovieCard(props) {
   };
 
   useEffect(() => {
-    return savedMoviesIds && savedMoviesIds.includes(card.movieId)
+    console.log("From Movie card >>>> card  " + JSON.stringify(card));
+    console.log("From Movie card >>>> savedMoviesIds  " + savedMoviesIds);
+    console.log("From Movie card >>>> card.movieId  " + card.image.id);
+    return savedMoviesIds && savedMoviesIds.includes(card.image.id)
       ? setIsSelect(true)
       : setIsSelect(false);
-  }, [savedMoviesIds, card.movieId]);
-
+  }, [savedMoviesIds,card, card.image.id]);
 
   return (
     <>
@@ -79,7 +90,9 @@ function MovieCard(props) {
 
         </div>
 
-        <img onClick={handleClickImg} className="movie__image" src={`${MOVIES_IMAGE_URL}${card.image.url}`}
+        <img onClick={handleClickImg}
+             className="movie__image"
+             src={moviesCardsListType === "general" ? (`${MOVIES_IMAGE_URL}${card.image.url}`) : (card.image)}
              alt={`Кадр из фильма ${card.nameRU}`}/>
 
       </li>

@@ -6,13 +6,11 @@ import {useFormWithValidation} from "../../hooks/useFormWithValidation";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
-  const {onSignOut, loggedIn, onUpdateProfile, message} = props;
+  const {onSignOut, loggedIn, onUpdateProfile, message, isSending} = props;
   const currentUser = useContext(CurrentUserContext);
 
 
-
-
-  console.log(">>Profile Current user data    " + currentUser);
+  console.log(">>Profile Current user data    " + JSON.stringify(currentUser));
   console.log(">>Profile Current name   " + currentUser.name);
   console.log(">>Profile Current email   " + currentUser.email);
 
@@ -20,19 +18,17 @@ function Profile(props) {
     useFormWithValidation();
 
   useEffect(() => {
-    if (currentUser) {
-      resetForm(currentUser, {}, true);
-    }
-  }, [currentUser, resetForm]);
-
+    resetForm(currentUser, {}, true);
+  }, [resetForm, currentUser]);
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const {name, email} = values;
     console.log(">>>>> New profile name:  " + name);
-    console.log(">>>>> New profile name:  " + email);
-    onUpdateProfile({email, name})
+    console.log(">>>>> New profile email:  " + email);
+    onUpdateProfile({email, name});
+
   };
 
   return (
@@ -46,7 +42,7 @@ function Profile(props) {
           <div className="profile__input-container">
             <label className="profile__input-label" htmlFor="profile-name">Имя</label>
             <input onChange={handleChange}
-                   value={values.name || currentUser.name }
+                   value={values.name || currentUser.name}
                    pattern="^[а-яА-ЯёЁa-zA-Z0-9]+$"
                    className="profile__input"
                    placeholder="Имя"
@@ -80,7 +76,7 @@ function Profile(props) {
           <span className="profile__input-error" id="profile-input-email-error">{errors.email}</span>
           <span className="profile__input-error">{message}</span>
           <button type="submit"
-                  disabled={!isValid}
+                  disabled={(!isValid) || (values.email === currentUser.email) || (values.name === currentUser.name) || (isSending)}
                   className="profile__btn">Редактировать
           </button>
 

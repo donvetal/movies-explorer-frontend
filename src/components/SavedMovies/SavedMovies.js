@@ -7,18 +7,26 @@ import MovieCardList from "../MovieCardList/MovieCardList";
 
 
 function SavedMovies(props) {
-  const {loggedIn, movies, searchMovies, deleteMovie, isLoading, savedMoviesIds} = props;
+const { loggedIn, searchMovies, movies, deleteMovie, isLoading, findShortMovies} = props;
+
+  const [shortMovies, setShortMovies] = React.useState([]);
+  const [isChecked, setIsChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isChecked) {
+      setShortMovies(findShortMovies(movies));
+    }
+  }, [isChecked, movies, findShortMovies]);
 
 
   return (
     <section className="saved-movies">
       <Header loggedIn={loggedIn}/>
-      <SearchForm searchMovies={searchMovies}/>
+      <SearchForm searchMovies={searchMovies} setIsChecked={setIsChecked}/>
 
       <MovieCardList moviesCardsListType="saved"
-                     movies={movies}
+                     movies={isChecked ? shortMovies : movies}
                      deleteMovie={deleteMovie}
-                     savedMoviesIds={savedMoviesIds}
                      isLoading={isLoading}/>
 
       <Footer/>
