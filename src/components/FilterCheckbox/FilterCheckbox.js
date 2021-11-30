@@ -1,6 +1,7 @@
 //Обратите внимание на фильтр с чекбоксом «Только короткометражки».
 import React, {useState} from "react";
 import './FilterCheckbox.css';
+import {TEXT} from '../../utils/constants';
 
 function FilterCheckbox(props) {
   const {onCheckboxToggle} = props;
@@ -24,7 +25,7 @@ function FilterCheckbox(props) {
                id="search-form__toggle-switch"/>
         <span className="search-form__toggle-switch"/>
       </label>
-      <p className="search-form__toggle-switch-text"> Короткометражки</p>
+      <p className="search-form__toggle-switch-text">{TEXT.shortFilms}</p>
 
 
     </div>

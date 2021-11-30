@@ -14,9 +14,11 @@ function Movies(props) {
     movies,
     isLoading,
     message,
-    isSearching,
     findShortMovies,
-    searchMovies
+    searchMovies,
+    resetMessage,
+    savedMovies,
+    deleteMovie
 
   } = props;
 
@@ -30,23 +32,24 @@ function Movies(props) {
     }
   }, [isChecked, movies, findShortMovies]);
 
+  React.useEffect(() => {
+    resetMessage();
+  }, []);
+
 
   return (
     <section className="movies">
       <Header loggedIn={loggedIn}/>
-      <SearchForm searchMovies={searchMovies} setIsChecked={setIsChecked}/>
-      {isSearching ? (
-
-        <MovieCardList moviesCardsListType="general"
-                       movies={isChecked ? shortMovies : movies}
-                       message={message}
-                       saveMovie={saveMovie}
-                       savedMoviesIds={savedMoviesIds}
-                       isLoading={isLoading}/>
-
-      ) : (
-        <p className="movies__info">«Ничего не найдено»</p>
-      )}
+      <SearchForm searchMovies={searchMovies} setIsChecked={setIsChecked} resetMessage={resetMessage}/>
+      <MovieCardList moviesCardsListType="general"
+                     movies={isChecked ? shortMovies : movies}
+                     message={message}
+                     saveMovie={saveMovie}
+                     savedMovies={savedMovies}
+                     deleteMovie={deleteMovie}
+                     savedMoviesIds={savedMoviesIds}
+                     resetMessage={resetMessage}
+                     isLoading={isLoading}/>
 
       <Footer/>
     </section>

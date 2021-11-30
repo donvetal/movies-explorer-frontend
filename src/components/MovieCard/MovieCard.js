@@ -1,12 +1,12 @@
 //MoviesCard — компонент одной карточки фильма.
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import './MovieCard.css';
 import {MOVIES_IMAGE_URL} from "../../utils/constants";
 
 
 function MovieCard(props) {
 
-  const {moviesCardsListType, saveMovie, card, deleteMovie, savedMoviesIds} = props;
+  const {moviesCardsListType, saveMovie, card, deleteMovie, savedMoviesIds, savedMovies} = props;
 
   const {
     country,
@@ -29,7 +29,6 @@ function MovieCard(props) {
   const durationStr = hours ? `${hours}ч ${minutes}м` : `${minutes}мин`;
 
   const handleSave = () => {
-    console.log("Movie card save movieId 1    " + card.movieId)
     saveMovie({
       country: country || 'Данные отсутствуют',
       director: director || 'Данные отсутствуют',
@@ -48,13 +47,8 @@ function MovieCard(props) {
 
   };
   const handleDelete = () => {
-    deleteMovie(card)
-    // deleteMovie(card);
-    // deleteMovie(moviesCardsListType === "general" ? (card.movieId) : (card._id));
-    console.log("From movie card >>>> card  " + JSON.stringify(card));
-    console.log("From movie card >>>> card._id  " + card._id);
-    console.log("From movie card >>>> card.id !!! " + card.id);
-    console.log("From movie card >>>> card.movieId  " + card.movieId);
+    const savedMovie = savedMovies.find((movie) => (movie.movieId === card.id || movie.movieId === card.movieId));
+    deleteMovie(savedMovie);
   };
 
   const handleClickImg = () => {
@@ -62,13 +56,11 @@ function MovieCard(props) {
   };
 
   useEffect(() => {
-    console.log("From Movie card >>>> card  " + JSON.stringify(card));
-    console.log("From Movie card >>>> savedMoviesIds  " + savedMoviesIds);
-    console.log("From Movie card >>>> card.movieId  " + card.image.id);
     return savedMoviesIds && savedMoviesIds.includes(card.image.id)
       ? setIsSelect(true)
       : setIsSelect(false);
-  }, [savedMoviesIds,card, card.image.id]);
+  }, [savedMoviesIds, card, card.image.id]);
+
 
   return (
     <>

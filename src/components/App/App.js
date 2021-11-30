@@ -10,12 +10,10 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
-// import fail from '../../images/info-tooltip-fail.svg';
-// import successImg from '../../images/info-tooltip-success.svg';
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Movies from "../Movies/Movies";
-import {MESSAGES, MOVIES_IMAGE_URL} from "../../utils/constants";
+import {MAX_SHORT_MOVIE_LENGTH, MESSAGES, MOVIES_IMAGE_URL} from "../../utils/constants";
 import * as utils from '../../utils/utils';
 
 
@@ -24,7 +22,6 @@ function App(props) {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
 
-  // const [registered, setRegistered] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isFormSending, setIsFormSending] = React.useState(false);
@@ -74,13 +71,13 @@ function App(props) {
           .then((res) => {
             localStorage.setItem("movies", JSON.stringify(res || []));
             setMovies(res || []);
-            setIsLoading(false);
+            // setIsLoading(false);
             setLoggedIn(true);
           });
         mainApi.getProfileMovies()
           .then(({movies}) => {
             console.log("App profile movies step 1>>> " + JSON.stringify(movies));
-
+            setMessageErr("");
             setSavedMovies(movies);
             setSearchedSavedMovies(movies);
             console.log("App profile searchedSavedMovies1>>> " + JSON.stringify(searchedSavedMovies));
@@ -94,6 +91,7 @@ function App(props) {
           });
       })
       .catch(error => {
+        setIsLoading(false);
         handleInfo(false, MESSAGES.fetchErrorMessage);
         console.log(error);
       })
@@ -102,6 +100,10 @@ function App(props) {
       });
 
   }, []);
+
+  const resetMessage = () => {
+    setMessageErr("");
+  };
 
 
   // Проверка авторизации пользователя
@@ -187,6 +189,9 @@ function App(props) {
         if (res) {
           handleInfo(true, MESSAGES.logout);
           setLoggedIn(false);
+          localStorage.removeItem('searchedMovies');
+          localStorage.removeItem('searchValue');
+          localStorage.removeItem('movies');
           props.history.push("/");
 
         }
@@ -197,9 +202,16 @@ function App(props) {
 
   function findShortMovies(movies) {
     const shortMoviesArray = movies.filter(
-      (movie) => movie.duration <= 40
+      (movie) => movie.duration <= MAX_SHORT_MOVIE_LENGTH
     );
+    if (shortMoviesArray.length === 0) {
+      setMessageErr(MESSAGES.moviesNotFound);
+    } else {
+      setMessageErr("");
+    }
     return shortMoviesArray;
+
+
   }
 
 
@@ -207,12 +219,19 @@ function App(props) {
     setIsLoading(true);
     setIsSearching(true);
 
+
     try {
       const filteredMovies = utils.searchByKeyword(movies, keyword, isCheckbox);
-      setSearchedMovies(filteredMovies);
-      setSearchValue({...searchValue, keyword: keyword});
-      localStorage.setItem('searchedMovies', JSON.stringify(filteredMovies));
-      localStorage.setItem('searchValue', JSON.stringify({isCheckbox, keyword}));
+      if (filteredMovies.length === 0) {
+        setMessageErr(MESSAGES.moviesNotFound);
+        setSearchedMovies([]);
+      } else {
+        setMessageErr("");
+        setSearchedMovies(filteredMovies);
+        setSearchValue({...searchValue, keyword: keyword});
+        localStorage.setItem('searchedMovies', JSON.stringify(filteredMovies));
+        localStorage.setItem('searchValue', JSON.stringify({isCheckbox, keyword}));
+      }
     } catch (err) {
       setMessageErr(err);
     } finally {
@@ -233,36 +252,23 @@ function App(props) {
         //   "savedMovies",
         //   JSON.stringify([savedMovie, ...savedMovies])
         // );
-        console.log("App save savedMovie>>>>  1" + JSON.stringify(data));
         setSavedMovies([data, ...savedMovies]);
-        console.log("App  savedMovie.movieId  step1:  " + data.movieId);
         setSavedMovieIds([...savedMovieIds, data.movieId]);
         setSearchedSavedMovies([data, ...savedMovies]);
-        // console.log("App save savedMovie" + savedMovie);
-        // console.log("App save savedMovieIds" + savedMovieIds);
       })
       .catch((err) => {
         setMessageErr(err);
       });
   };
 
-  const removeMovie = (card) => {
-    const savedMovie = savedMovies.find((movie) => (movie.movieId === card.id || movie.movieId === card.movieId));
-    console.log("step0" + JSON.stringify(savedMovie));
+  const removeMovie = (savedMovie) => {
     mainApi.deleteProfileMovie(savedMovie._id)
       .then(() => {
-        console.log("step1");
         const filteredMovies = savedMovies.filter((movie) => movie._id !== savedMovie._id);
-        console.log("step2");
         const filteredMoviesIds = savedMovieIds.filter((id) => id !== savedMovie.movieId);
-        // console.log("step3")
-
         setSavedMovies(filteredMovies);
-        console.log("step4");
         setSavedMovieIds(filteredMoviesIds);
-        console.log("step5");
         setSearchedSavedMovies(filteredMovies);
-        console.log("step6");
       })
       .catch((err) => {
         setMessageErr(err);
@@ -270,55 +276,13 @@ function App(props) {
 
   };
 
-  // const removeMovie = async (movieId) => {
-  //   console.log("App movieId    " + movieId)
-  //   try {
-  //     const removedMovie = await mainApi.deleteProfileMovie(movieId);
-  //
-  //     if (removedMovie) {
-  //       console.log("step1");
-  //       const filteredMovies = searchedSavedMovies.filter((movie) => movie._id !== movieId);
-  //       console.log("step2")
-  //       // const filteredMoviesIds = savedMovieIds.filter((id) => id !== movieId);
-  //       // console.log("step3")
-  //
-  //       // setSavedMovies(filteredMovies);
-  //       // console.log("step4")
-  //       // setSavedMovieIds(filteredMoviesIds);
-  //       console.log("step5")
-  //       setSearchedSavedMovies(filteredMovies);
-  //       console.log("step6")
-  //     }
-  //
-  //     return;
-  //   } catch (err) {
-  //     setMessageErr(err.message);
-  //   }
-  // };
 
+  // Saved Movies
+  function handleInitSavedMovies() {
+    setSearchedSavedMovies(savedMovies);
+    setMessageErr("");
 
-  // const handleSaveMovie = (movie) => {
-  //   mainApi.setProfileMovie({
-  //     ...movie,
-  //     image: `${MOVIES_IMAGE_URL}${movie.image.url}`,
-  //     thumbnail: `${MOVIES_IMAGE_URL}${movie.image.formats.thumbnail.url}`,
-  //     movieId: movie.image.id
-  //   })
-  //     .then((savedMovie) => {
-  //       localStorage.setItem(
-  //         "savedMovies",
-  //         JSON.stringify([savedMovie, ...savedMovies])
-  //       );
-  //
-  //       setSavedMovies([savedMovie, ...savedMovies]);
-  //       setSearchedSavedMovies([savedMovie, ...savedMovies]);
-  //       setSavedMovieIds([...savedMovieIds, savedMovie.movieId]);
-  //     })
-  //     .catch((err) => {
-  //       setMessageErr(err);
-  //     });
-  // };
-
+  }
 
   // ---Функции поиска
   const searchSavedMovies = (keyword, isCheckbox) => {
@@ -326,7 +290,13 @@ function App(props) {
 
     try {
       const filteredMovies = utils.searchByKeyword(savedMovies, keyword, isCheckbox);
-      setSearchedSavedMovies(filteredMovies);
+      if (filteredMovies.length === 0) {
+        setMessageErr(MESSAGES.moviesNotFound);
+        setSearchedSavedMovies([]);
+      } else {
+        setMessageErr("");
+        setSearchedSavedMovies(filteredMovies);
+      }
     } catch (err) {
       setMessageErr(err);
     } finally {
@@ -347,14 +317,11 @@ function App(props) {
     }
     return;
   }, [loggedIn]);
-  //
+
   console.log("App profile savedMovieIds 2 >>> " + JSON.stringify(savedMovieIds));
-  // console.log("isAuthChecking:" + isAuthChecking);
   console.log("App profile searchedSavedMovies2>>> " + JSON.stringify(searchedSavedMovies));
-  console.log("savedMovies: " + JSON.stringify(savedMovies));
-  // console.log('isInfoTooltipOpen:  ' + isInfoTooltipOpen);
-  // console.log('registered:  ' + registered);
-  // console.log(' loggedIn:  ' + loggedIn);
+  console.log("From APP savedMovies last step: " + JSON.stringify(savedMovies));
+
 
   return (
     <div className="App">
@@ -365,6 +332,7 @@ function App(props) {
           </Route>
           <ProtectedRoute component={Movies}
                           movies={searchedMovies}
+                          savedMovies={savedMovies}
                           path="/movies"
                           loggedIn={loggedIn}
                           isLoading={isLoading}
@@ -376,6 +344,7 @@ function App(props) {
                           searchMovies={searchMovies}
                           isSearching={isSearching}
                           findShortMovies={findShortMovies}
+                          resetMessage={resetMessage}
                           message={messageErr}
           />
 
@@ -383,14 +352,18 @@ function App(props) {
           <ProtectedRoute component={SavedMovies}
                           path="/saved-movies"
                           movies={searchedSavedMovies}
+                          initSavedMovies={handleInitSavedMovies}
                           searchMovies={searchSavedMovies}
                           deleteMovie={removeMovie}
                           isChecking={isAuthChecking}
                           loggedIn={loggedIn}
                           isSearching={isSearching}
                           findShortMovies={findShortMovies}
+                          resetMessage={resetMessage}
                           isLoading={isLoading}
-            // savedMoviesIds={savedMovieIds}
+                          message={messageErr}
+                          savedMovies={savedMovies}
+                          savedMoviesIds={savedMovieIds}
           />
 
 

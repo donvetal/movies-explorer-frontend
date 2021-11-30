@@ -3,10 +3,10 @@ import React, {useEffect, useState} from 'react';
 import './MovieCardList.css';
 import MovieCard from "../MovieCard/MovieCard";
 import Preloader from "../Preloader/Preloader";
-import {renderCardsNumber} from "../../utils/constants";
+import {RENDER_CARDS_NUMBER, TEXT} from "../../utils/constants";
 
 function MovieCardList(props) {
-  const {isLoading, saveMovie, deleteMovie, savedMoviesIds, moviesCardsListType,} = props;
+  const {isLoading, saveMovie, deleteMovie, savedMoviesIds, moviesCardsListType, message, savedMovies} = props;
   const movies = props.movies || [];
 
 
@@ -24,21 +24,20 @@ function MovieCardList(props) {
 
   const renderCards = React.useCallback(() => {
     if (windowWidth >= 890) {
-      setDisplayedCardsNumber(renderCardsNumber.windowSizeXL);
-      setDisplayedMoreCardsNumber(renderCardsNumber.windowSizeS);
+      setDisplayedCardsNumber(RENDER_CARDS_NUMBER.windowSizeXL);
+      setDisplayedMoreCardsNumber(RENDER_CARDS_NUMBER.windowSizeS);
     } else if (windowWidth >= 480) {
-      setDisplayedCardsNumber(renderCardsNumber.windowSizeL);
-      setDisplayedMoreCardsNumber(renderCardsNumber.windowSizeXS);
+      setDisplayedCardsNumber(RENDER_CARDS_NUMBER.windowSizeL);
+      setDisplayedMoreCardsNumber(RENDER_CARDS_NUMBER.windowSizeXS);
     } else {
-      setDisplayedCardsNumber(renderCardsNumber.windowSizeM);
-      setDisplayedMoreCardsNumber(renderCardsNumber.windowSizeXS);
+      setDisplayedCardsNumber(RENDER_CARDS_NUMBER.windowSizeM);
+      setDisplayedMoreCardsNumber(RENDER_CARDS_NUMBER.windowSizeXS);
     }
 
     return () => window.removeEventListener('resize', updateWindowWidth);
   }, [windowWidth]);
 
   useEffect(() => {
-
     renderCards();
   }, [renderCards]);
 
@@ -47,9 +46,10 @@ function MovieCardList(props) {
     return () => window.removeEventListener('resize', updateWindowWidth);
   }, [windowWidth]);
 
+
   return (
     <>
-      {!isLoading && movies.length === 0 && <p className="movies__text-void">Ничего не найдено</p>}
+      {!isLoading && message && <p className="movies__text-void">{message}</p>}
       {
         isLoading ? (
           <Preloader/>
@@ -67,7 +67,7 @@ function MovieCardList(props) {
                     card={movie}
                     deleteMovie={deleteMovie}
                     moviesCardsListType={moviesCardsListType}
-                    // isMovieCardSelect={movie.isMovieCardSelect}
+                    savedMovies={savedMovies}
                   />
                 );
 
@@ -76,7 +76,7 @@ function MovieCardList(props) {
 
             </ul>
             {!isLoading && movies.length > displayedCardsNumber && (
-              <button type="button" className="movies__button" onClick={handleMoreClick}>Ещё</button>
+              <button type="button" className="movies__button" onClick={handleMoreClick}>{TEXT.buttonMore}</button>
             )}
           </>
         )

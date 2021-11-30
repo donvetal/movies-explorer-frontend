@@ -6,6 +6,8 @@
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #E8E8E8;
+    position: relative;
+
 
 }
 
@@ -21,6 +23,7 @@
     border-radius: 9px 0 0 9px;
     max-width: 913px;
     width: 100%;
+
 
 }
 
@@ -41,6 +44,21 @@
     border: 0;
     outline-style: none;
 
+
+}
+
+.search__input_error {
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    color: #FF4062;
+    margin: 0;
+    padding: 6px 0;
+    height: 12px;
+    text-align: start;
+    position: absolute;
+    left: 0;
+    bottom: 40px;
 }
 
 .search-form__input:focus-within {
@@ -87,6 +105,10 @@
         padding-top: 80px;
         padding-bottom: 109px;
 
+    }
+
+    .search__input_error {
+        bottom: 80px;
     }
 }
 

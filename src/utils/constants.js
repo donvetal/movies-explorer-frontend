@@ -30,13 +30,19 @@ export const savedMovies = [{image: movieImage1, text: "33 слова о диз�
 
 export const MOVIES_IMAGE_URL = 'https://api.nomoreparties.co';
 
-export const renderCardsNumber = {
+export const RENDER_CARDS_NUMBER = {
   windowSizeXS: 2,
   windowSizeS: 3,
   windowSizeM: 5,
   windowSizeL: 8,
   windowSizeXL: 12,
 };
+export const MAX_SHORT_MOVIE_LENGTH = '40';
+
+export const TEXT = {
+  buttonMore: 'Ещё',
+  shortFilms: 'Короткометражки'
+}
 
 export const MESSAGES = {
   auth: 'Авторизация прошла успешно.',
@@ -46,4 +52,6 @@ export const MESSAGES = {
   searchError: 'Нужно ввести ключевое слово в поле поиска.',
   defaultError: 'Что-то пошло не так! Попробуйте ещё раз.',
   fetchErrorMessage: 'Ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз',
+  searchVoidMessage: "Нужно ввести ключевое слово",
+  moviesNotFound: "«Ничего не найдено»",
 }

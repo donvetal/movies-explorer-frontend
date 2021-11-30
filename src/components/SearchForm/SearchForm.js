@@ -2,11 +2,13 @@
 import React from 'react';
 import './SearchForm.css';
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import {MESSAGES} from '../../utils/constants';
 
-function SearchForm({searchMovies, setIsChecked}) {
+function SearchForm({searchMovies, setIsChecked, resetMessage}) {
   const [searchKeyWord, setSearchKeyWord] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isShortMovies, setIsShortMovies] = React.useState(false);
+
 
   function onChange(e) {
     setSearchKeyWord(e.target.value);
@@ -15,23 +17,28 @@ function SearchForm({searchMovies, setIsChecked}) {
   function handleToggleCheckbox(checked) {
     setIsShortMovies(checked);
     setIsChecked(!isShortMovies);
+    setErrorMessage("");
+    resetMessage();
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("step1")
-    if (!searchKeyWord) {
-      setErrorMessage("Нужно ввести ключевое слово");
-      return;
+    if (searchKeyWord) {
+      searchMovies(searchKeyWord);
+      setErrorMessage("");
+    } else {
+      setErrorMessage(MESSAGES.searchVoidMessage);
+      ;
     }
-    console.log("step2")
-    searchMovies(searchKeyWord);
+    return;
   }
+
 
   return (
     <section className="search">
       <form className="search-form"
             onSubmit={handleSubmit}>
+
         <input type="text"
                id="header-search"
                value={searchKeyWord}
@@ -41,10 +48,9 @@ function SearchForm({searchMovies, setIsChecked}) {
                placeholder="Фильм"
                name="movies"
                className="search-form__input"
-               autoComplete="off"
-               required/>
+               autoComplete="off"/>
+
         <div className="search-form__container">
-          <p className="search__input_error">{errorMessage}</p>
           <button type="submit" className="search-form__btn">Найти</button>
 
         </div>
@@ -52,7 +58,7 @@ function SearchForm({searchMovies, setIsChecked}) {
 
       </form>
       <FilterCheckbox onCheckboxToggle={handleToggleCheckbox}/>
-
+      <p className="search__input_error">{errorMessage}</p>
     </section>
   );
 }
