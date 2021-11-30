@@ -5,6 +5,7 @@
     align-items: center;
 
 
+
 }
 
 
@@ -100,6 +101,7 @@
     background-color: #ffffff;
     right: 0;
     z-index: 4;
+
 }
 
 .mobile-navigation__links {
@@ -168,6 +170,7 @@
     transition: opacity 0.5s linear;
     box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
     z-index: 13;
+
 }
 
 .mobile-navigation__profile-btn {

@@ -14,11 +14,11 @@ function MovieCard(props) {
     year,
     description,
     image,
+    trailerLink,
     thumbnail,
     nameRU,
     nameEN,
     duration,
-    trailer,
     movieId,
   } = card;
   const [isSelect, setIsSelect] = useState(false);
@@ -28,30 +28,29 @@ function MovieCard(props) {
   const minutes = card.duration - hours * 60;
   const durationStr = hours ? `${hours}ч ${minutes}м` : `${minutes}мин`;
 
+  console.log("save card step 0" + JSON.stringify(card));
+
   const handleSave = () => {
     saveMovie({
-      country: country || TEXT.noData,
-      director: director || TEXT.noData,
-      duration: duration || 0,
-      year: year || TEXT.noData,
-      description: description || '',
-      image: image || IMAGE_URL,
-      trailer: trailer || YOUTUBE_URL,
-      thumbnail: thumbnail || THUMBNAIL_URL,
-      nameRU: nameRU || TEXT.noData,
-      nameEN: nameEN || TEXT.noData,
-      movieId,
-    });
-
-
+        country: country || TEXT.noData,
+        director: director || TEXT.noData,
+        duration: duration || 0,
+        year: year || TEXT.noData,
+        description: description || '',
+        image: image || IMAGE_URL,
+        trailer: trailerLink || YOUTUBE_URL,
+        thumbnail: thumbnail || THUMBNAIL_URL,
+        nameRU: nameRU || TEXT.noData,
+        nameEN: nameEN || TEXT.noData,
+        movieId,
+      }
+    );
   };
+
+  console.log("save movie " + JSON.stringify(saveMovie));
   const handleDelete = () => {
-    const savedMovie = savedMovies.find((movie) => (movie.movieId === card.id || movie.movieId === card.movieId));
+    const savedMovie = savedMovies.find((movie) => (movie.movieId === card.id || movie.movieId === card.movieId || movie.movieId === card.image.id));
     deleteMovie(savedMovie);
-  };
-
-  const handleClickImg = () => {
-    window.open(card.trailerLink);
   };
 
   useEffect(() => {
@@ -80,11 +79,17 @@ function MovieCard(props) {
           )}
 
         </div>
-
-        <img onClick={handleClickImg}
-             className="movie__image"
-             src={moviesCardsListType === "general" ? (`${MOVIES_IMAGE_URL}${card.image.url}`) : (card.image)}
-             alt={`Кадр из фильма ${card.nameRU}`}/>
+        <a
+          href={moviesCardsListType === "general" ? (card.trailerLink) : (card.trailer)}
+          target="_blank"
+          rel="noreferrer"
+          className="movie__link"
+        >
+          <img
+            className="movie__image"
+            src={moviesCardsListType === "general" ? (`${MOVIES_IMAGE_URL}${card.image.url}`) : (card.image)}
+            alt={`Кадр из фильма ${card.nameRU}`}/>
+        </a>
 
       </li>
 

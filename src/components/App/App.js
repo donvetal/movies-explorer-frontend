@@ -17,7 +17,7 @@ import {MAX_SHORT_MOVIE_LENGTH, MESSAGES, MOVIES_IMAGE_URL} from "../../utils/co
 import * as utils from '../../utils/utils';
 
 
-function App(props) {
+function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -38,7 +38,7 @@ function App(props) {
   const [messageErr, setMessageErr] = useState(null);
   const [infoMessage, setInfoMessage] = useState('');
 
-  const history =useHistory();
+  const history = useHistory();
 
 
   const onInfoTooltipClose = () => {
@@ -63,16 +63,19 @@ function App(props) {
 
     mainApi.getProfile()
       .then(({data}) => {
-        if (!data) throw new Error(`Error: ${data.message}`);
+        if (!data) handleInfo(false, MESSAGES.fetchErrorMessage);
         setCurrentUser(data);
         setIsFormSending(false);
         moviesApi.getMoviesList()
           .then((res) => {
+            if (!res) handleInfo(false, MESSAGES.fetchErrorMessage);
             setMovies(res || []);
             setLoggedIn(true);
+
           });
         mainApi.getProfileMovies()
           .then(({movies}) => {
+            if (!movies) handleInfo(false, MESSAGES.fetchErrorMessage);
             setMessageErr("");
             setSavedMovies(movies);
             setSearchedSavedMovies(movies);
@@ -82,11 +85,13 @@ function App(props) {
       })
       .catch(error => {
         setIsLoading(false);
-        handleInfo(false, MESSAGES.fetchErrorMessage);
         console.log(error);
+        setMessageErr(error);
       })
       .finally(() => {
+
         setIsLoading(false);
+
       });
 
   }, []);
@@ -185,7 +190,6 @@ function App(props) {
           handleInfo(true, MESSAGES.logout);
           setLoggedIn(false);
           setIsFormSending(false);
-
           setSearchedMovies([]);
           setSearchValue({});
           setIsSearching(false);
@@ -238,12 +242,12 @@ function App(props) {
   };
 
   const handleSaveMovie = (movie) => {
-
     mainApi.setProfileMovie({
       ...movie,
       image: `${MOVIES_IMAGE_URL}${movie.image.url}`,
       thumbnail: `${MOVIES_IMAGE_URL}${movie.image.formats.thumbnail.url}`,
-      movieId: movie.image.id
+      movieId: movie.image.id,
+      trailer: movie.trailer,
     })
       .then(({data}) => {
         setSavedMovies([data, ...savedMovies]);
@@ -256,6 +260,7 @@ function App(props) {
   };
 
   const removeMovie = (savedMovie) => {
+    console.log("App delete movie" + JSON.stringify(savedMovie));
     mainApi.deleteProfileMovie(savedMovie._id)
       .then(() => {
         const filteredMovies = savedMovies.filter((movie) => movie._id !== savedMovie._id);
