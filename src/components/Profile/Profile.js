@@ -4,15 +4,12 @@ import './Profile.css';
 import Header from "../Header/Header";
 import {useFormWithValidation} from "../../hooks/useFormWithValidation";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import {TEXT} from "../../utils/constants";
 
 function Profile(props) {
-  const {onSignOut, loggedIn, onUpdateProfile, message, isSending} = props;
+  const {onSignOut, loggedIn, onUpdateProfile, message, isSending, resetMessage} = props;
   const currentUser = useContext(CurrentUserContext);
 
-
-  console.log(">>Profile Current user data    " + JSON.stringify(currentUser));
-  console.log(">>Profile Current name   " + currentUser.name);
-  console.log(">>Profile Current email   " + currentUser.email);
 
   const {values, handleChange, resetForm, errors, isValid} =
     useFormWithValidation();
@@ -21,12 +18,15 @@ function Profile(props) {
     resetForm(currentUser, {}, true);
   }, [resetForm, currentUser]);
 
+  useEffect(() => {
+    resetMessage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const {name, email} = values;
-    console.log(">>>>> New profile name:  " + name);
-    console.log(">>>>> New profile email:  " + email);
     onUpdateProfile({email, name});
 
   };
@@ -76,14 +76,14 @@ function Profile(props) {
           <span className="profile__input-error" id="profile-input-email-error">{errors.email}</span>
           <span className="profile__input-error">{message}</span>
           <button type="submit"
-                  disabled={(!isValid) || (values.email === currentUser.email) || (values.name === currentUser.name) || (isSending)}
-                  className="profile__btn">Редактировать
+                  disabled={(!isValid) || (values.email === currentUser.email && values.name === currentUser.name) || (isSending)}
+                  className="profile__btn">{TEXT.buttonEdit}
           </button>
 
         </form>
         <button onClick={onSignOut}
                 type="button"
-                className="profile__btn-signout">Выйти из аккаунта
+                className="profile__btn-signout">{TEXT.buttonSignOut}
         </button>
       </section>
     </>

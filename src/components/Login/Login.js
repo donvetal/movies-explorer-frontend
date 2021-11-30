@@ -4,11 +4,13 @@ import './Login.css';
 import {Link} from "react-router-dom";
 import logo from "../../images/logo.svg";
 import {useFormWithValidation} from "../../hooks/useFormWithValidation";
+import {TEXT} from "../../utils/constants";
 
 function Login(props) {
-  const {onLogin} = props;
+  const {onLogin, message, isSending} = props;
   const {values, handleChange, resetForm, errors, isValid} =
     useFormWithValidation();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,13 +54,13 @@ function Login(props) {
                autoComplete="off"
                required/>
         <span className="login__input-error" id="login-input-password-error">{errors.password}</span>
-        <span className="login__input-error">{props.message}</span>
+        <span className="login__input-error">{message}</span>
         <button type="submit"
-                disabled={!isValid}
-                className="login__btn">Войти
+                disabled={(!isValid) || (isSending)}
+                className="login__btn">{TEXT.login}
         </button>
-        <p className="login__text">Ещё не зарегистрированы?
-          <Link to="/signup" className="login__signup-link">Регистрация</Link>
+        <p className="login__text">{TEXT.notRegisteredYet}
+          <Link to="/signup" className="login__signup-link">{TEXT.registration}</Link>
         </p>
 
       </form>

@@ -1,6 +1,6 @@
 import './App.css';
-import React, {useCallback, useEffect} from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
+import React, {useCallback, useEffect, useState} from "react";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import Main from "../Main/Main";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import Register from "../Register/Register";
@@ -18,27 +18,27 @@ import * as utils from '../../utils/utils';
 
 
 function App(props) {
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
 
-  const [movies, setMovies] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isFormSending, setIsFormSending] = React.useState(false);
-  const [isSearching, setIsSearching] = React.useState(false);
-  const [isAuthChecking, setIsAuthChecking] = React.useState(true);
-
-  const [savedMovies, setSavedMovies] = React.useState([]);
-  const [savedMovieIds, setSavedMovieIds] = React.useState([]);
-  const [searchedMovies, setSearchedMovies] = React.useState([]);
-  const [searchedSavedMovies, setSearchedSavedMovies] = React.useState([]);
-  const [searchValue, setSearchValue] = React.useState({});
-
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFormSending, setIsFormSending] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [savedMovieIds, setSavedMovieIds] = useState([]);
+  const [searchedMovies, setSearchedMovies] = useState([]);
+  const [searchedSavedMovies, setSearchedSavedMovies] = useState([]);
+  const [searchValue, setSearchValue] = useState({});
   // InfoTooltip
-  const [resultSuccessful, setResultSuccessful] = React.useState(false);
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-  const [messageErr, setMessageErr] = React.useState(null);
-  const [infoMessage, setInfoMessage] = React.useState('');
+  const [resultSuccessful, setResultSuccessful] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [messageErr, setMessageErr] = useState(null);
+  const [infoMessage, setInfoMessage] = useState('');
+
+  const history =useHistory();
 
 
   const onInfoTooltipClose = () => {
@@ -47,7 +47,6 @@ function App(props) {
 
   function handleError(error) {
     setMessageErr(error);
-    console.log(error);
     handleInfo(false, MESSAGES.defaultError);
   }
 
@@ -64,30 +63,21 @@ function App(props) {
 
     mainApi.getProfile()
       .then(({data}) => {
-        console.log(">>currentUser" + {data});
         if (!data) throw new Error(`Error: ${data.message}`);
         setCurrentUser(data);
+        setIsFormSending(false);
         moviesApi.getMoviesList()
           .then((res) => {
-            localStorage.setItem("movies", JSON.stringify(res || []));
             setMovies(res || []);
-            // setIsLoading(false);
             setLoggedIn(true);
           });
         mainApi.getProfileMovies()
           .then(({movies}) => {
-            console.log("App profile movies step 1>>> " + JSON.stringify(movies));
             setMessageErr("");
             setSavedMovies(movies);
             setSearchedSavedMovies(movies);
-            console.log("App profile searchedSavedMovies1>>> " + JSON.stringify(searchedSavedMovies));
-
             const saveIds = movies.map((movie) => movie.movieId);
-            console.log("App profile  saveIds " + JSON.stringify(saveIds));
             setSavedMovieIds(saveIds);
-            console.log("App profile savedMovieIds 1 >>> " + JSON.stringify(savedMovieIds));
-
-
           });
       })
       .catch(error => {
@@ -128,26 +118,29 @@ function App(props) {
 
 
   const handleLogin = ({password, email}) => {
+    setIsFormSending(true);
     mainApi.authorize(password, email)
       .then((res) => {
         if (!res || res.statusCode === 400 || res.statusCode === 401) throw new Error(`Ошибка: ${res.message}`);
-        if (res.message === 'Авторизация прошла успешно!') {
+        if (res.message === MESSAGES.authorizationSuccessful) {
           handleInfo(true, MESSAGES.auth);
           successfulAuth();
           setMessageErr("");
-
         }
-
       })
       .catch(err => {
         handleError(err);
-        console.log(err);
+        setIsFormSending(false);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsFormSending(false);
+        setIsLoading(false);
+      });
   };
 
   const handleRegister = ({password, email, name}) => {
     setIsAuthChecking(true);
+    setIsFormSending(true);
     mainApi.register(password, email, name)
       .then(() => {
         handleInfo(true, MESSAGES.register);
@@ -158,9 +151,12 @@ function App(props) {
       })
       .catch((err) => {
         handleError(err);
-
       })
-      .finally((() => setIsLoading(false)));
+      .finally((() => {
+          setIsLoading(false);
+          setIsFormSending(false);
+        }
+      ));
   };
 
   const handleUpdateProfile = ({name, email}) => {
@@ -173,7 +169,6 @@ function App(props) {
       })
       .catch(err => {
         setMessageErr(err);
-        console.log(err);
         handleError(err);
       })
       .finally(() => {
@@ -189,10 +184,14 @@ function App(props) {
         if (res) {
           handleInfo(true, MESSAGES.logout);
           setLoggedIn(false);
+          setIsFormSending(false);
+
+          setSearchedMovies([]);
+          setSearchValue({});
+          setIsSearching(false);
           localStorage.removeItem('searchedMovies');
           localStorage.removeItem('searchValue');
-          localStorage.removeItem('movies');
-          props.history.push("/");
+          history.push("/");
 
         }
       })
@@ -218,7 +217,6 @@ function App(props) {
   const searchMovies = (keyword, isCheckbox) => {
     setIsLoading(true);
     setIsSearching(true);
-
 
     try {
       const filteredMovies = utils.searchByKeyword(movies, keyword, isCheckbox);
@@ -248,10 +246,6 @@ function App(props) {
       movieId: movie.image.id
     })
       .then(({data}) => {
-        // localStorage.setItem(App  savedMovie.movieId
-        //   "savedMovies",
-        //   JSON.stringify([savedMovie, ...savedMovies])
-        // );
         setSavedMovies([data, ...savedMovies]);
         setSavedMovieIds([...savedMovieIds, data.movieId]);
         setSearchedSavedMovies([data, ...savedMovies]);
@@ -318,10 +312,6 @@ function App(props) {
     return;
   }, [loggedIn]);
 
-  console.log("App profile savedMovieIds 2 >>> " + JSON.stringify(savedMovieIds));
-  console.log("App profile searchedSavedMovies2>>> " + JSON.stringify(searchedSavedMovies));
-  console.log("From APP savedMovies last step: " + JSON.stringify(savedMovies));
-
 
   return (
     <div className="App">
@@ -373,17 +363,23 @@ function App(props) {
                           loggedIn={loggedIn}
                           onSignOut={handleSignOut}
                           message={messageErr}
+                          resetMessage={resetMessage}
                           isSending={isFormSending}
-                          onUpdateProfile={handleUpdateProfile}/>
+                          onUpdateProfile={handleUpdateProfile}
+          />
 
 
           <Route path="/signup">
 
-            {loggedIn ? (<Redirect to="movies"/>) : (<Register onRegister={handleRegister} message={messageErr}/>)}
+            {loggedIn ? (<Redirect to="movies"/>) : (<Register onRegister={handleRegister}
+                                                               message={messageErr}
+                                                               isSending={isFormSending}/>)}
 
           </Route>
           <Route path="/signin">
-            {loggedIn ? (<Redirect to="movies"/>) : (<Login onLogin={handleLogin} message={messageErr}/>)}
+            {loggedIn ? (<Redirect to="movies"/>) : (<Login onLogin={handleLogin}
+                                                            message={messageErr}
+                                                            isSending={isFormSending}/>)}
 
 
           </Route>

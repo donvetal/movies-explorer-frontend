@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import './MobileNavigation.css';
 import {Link, NavLink} from "react-router-dom";
 import profileLogo from "../../images/profile-logo.svg";
+import {TEXT} from "../../utils/constants";
 
 function MobileNavigation() {
   const [isBurgerMenu, setBurgerMenu] = useState(false);
@@ -30,22 +31,21 @@ function MobileNavigation() {
                 <NavLink to="/"
                          exact
                          activeClassName="mobile-navigation__link_active"
-                         className="mobile-navigation__link">Главная</NavLink>
+                         className="mobile-navigation__link">{TEXT.main}</NavLink>
               </li>
               <li className="mobile-navigation__link-content">
                 <NavLink to="/movies"
                          activeClassName="mobile-navigation__link_active"
-                         className="mobile-navigation__link">Фильмы</NavLink>
+                         className="mobile-navigation__link">{TEXT.movies}</NavLink>
               </li>
               <li className="mobile-navigation__link-content">
                 <NavLink to="/saved-movies"
                          activeClassName="mobile-navigation__link_active"
-                         className="mobile-navigation__link">Сохраненные
-                  фильмы</NavLink></li>
+                         className="mobile-navigation__link">{TEXT.savedMovies}</NavLink></li>
 
             </ul>
             <li><Link to="/profile" className="mobile-navigation__profile-btn">
-              <p className="mobile-navigation__profile-text">Аккаунт</p>
+              <p className="mobile-navigation__profile-text">{TEXT.account}</p>
               <img className="mobile-navigation__profile-logo" src={profileLogo} alt="лого аккаунта"/>
             </Link></li>
           </ul>

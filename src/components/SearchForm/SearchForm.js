@@ -2,7 +2,7 @@
 import React from 'react';
 import './SearchForm.css';
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
-import {MESSAGES} from '../../utils/constants';
+import {MESSAGES, TEXT} from '../../utils/constants';
 
 function SearchForm({searchMovies, setIsChecked, resetMessage}) {
   const [searchKeyWord, setSearchKeyWord] = React.useState("");
@@ -51,7 +51,7 @@ function SearchForm({searchMovies, setIsChecked, resetMessage}) {
                autoComplete="off"/>
 
         <div className="search-form__container">
-          <button type="submit" className="search-form__btn">Найти</button>
+          <button type="submit" className="search-form__btn">{TEXT.buttonSearch}</button>
 
         </div>
 

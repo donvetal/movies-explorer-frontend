@@ -4,9 +4,10 @@ import {Link} from "react-router-dom";
 import logo from "../../images/logo.svg";
 import './Register.css';
 import {useFormWithValidation} from "../../hooks/useFormWithValidation";
+import {TEXT} from "../../utils/constants";
 
 function Register(props) {
-  const {onRegister} = props;
+  const {onRegister, message, isSending} = props;
   const {values, handleChange, resetForm, errors, isValid} =
     useFormWithValidation();
 
@@ -20,7 +21,7 @@ function Register(props) {
   return (
     <section className="register">
       <Link to="/" className="register__link">
-        <img src={logo} alt="логтип проекта" className="register__logo"/>
+        <img src={logo} alt={TEXT.projectLogo} className="register__logo"/>
       </Link>
       <h1 className="register__title">Добро пожаловать!</h1>
 
@@ -39,7 +40,7 @@ function Register(props) {
                required/>
         <span className="register__input-error" id="register-input-name-error">{errors.name}</span>
 
-        <label className="register__input-label" htmlFor="register-email">E-mail</label>
+        <label className="register__input-label" htmlFor="register-email">{TEXT.email}</label>
         <input onChange={handleChange}
                value={values.email || ""}
                pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
@@ -54,7 +55,7 @@ function Register(props) {
         <span className="register__input-error" id="register-input-email-error">{errors.email}</span>
 
 
-        <label className="register__input-label" htmlFor="register-password">Пароль</label>
+        <label className="register__input-label" htmlFor="register-password">{TEXT.password}</label>
         <input onChange={handleChange}
                value={values.password || ""}
                className="register__input register__input_password"
@@ -66,13 +67,13 @@ function Register(props) {
                autoComplete="off"
                required/>
         <span className="register__input-error" id="register-input-password-error">{errors.password}</span>
-        <span  className="register__input-error">{props.message}</span>
+        <span className="register__input-error">{message}</span>
         <button type="submit"
-                disabled={!isValid}
-                className="register__btn">Зарегистрироваться
+                disabled={(!isValid) || (isSending)}
+                className="register__btn">{TEXT.registration}
         </button>
-        <p className="register__text">Уже зарегистрированы?
-          <Link to="/signin" className="register__signin-link">Войти</Link>
+        <p className="register__text">{TEXT.alreadyRegistered}
+          <Link to="/signin" className="register__signin-link">{TEXT.login}</Link>
         </p>
 
       </form>

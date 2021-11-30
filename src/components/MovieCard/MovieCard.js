@@ -1,7 +1,7 @@
 //MoviesCard — компонент одной карточки фильма.
 import React, {useEffect, useState} from "react";
 import './MovieCard.css';
-import {MOVIES_IMAGE_URL} from "../../utils/constants";
+import {IMAGE_URL, MOVIES_IMAGE_URL, TEXT, THUMBNAIL_URL, YOUTUBE_URL} from "../../utils/constants";
 
 
 function MovieCard(props) {
@@ -30,17 +30,16 @@ function MovieCard(props) {
 
   const handleSave = () => {
     saveMovie({
-      country: country || 'Данные отсутствуют',
-      director: director || 'Данные отсутствуют',
+      country: country || TEXT.noData,
+      director: director || TEXT.noData,
       duration: duration || 0,
-      year: year || 'Данные отсутствуют',
+      year: year || TEXT.noData,
       description: description || '',
-      image: image || 'https://yandex.ru/images/search?text=%D0%9B%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA&nl=1&source=morda',
-      trailer: trailer || 'https://youtube.com',
-      thumbnail: thumbnail || 'https://yandex.ru/images/search?text' +
-        '=%D0%9B%D0%B5%D0%B4%D0%BD%D0%B8%D0%BA&nl=1&source=morda',
-      nameRU: nameRU || 'Данные отсутствуют',
-      nameEN: nameEN || 'Данные отсутствуют',
+      image: image || IMAGE_URL,
+      trailer: trailer || YOUTUBE_URL,
+      thumbnail: thumbnail || THUMBNAIL_URL,
+      nameRU: nameRU || TEXT.noData,
+      nameEN: nameEN || TEXT.noData,
       movieId,
     });
 

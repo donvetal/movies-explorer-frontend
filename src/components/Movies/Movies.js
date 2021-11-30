@@ -1,5 +1,5 @@
 //Movies — компонент страницы с поиском по фильмам.
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import './Movies.css';
@@ -23,17 +23,18 @@ function Movies(props) {
   } = props;
 
 
-  const [shortMovies, setShortMovies] = React.useState([]);
-  const [isChecked, setIsChecked] = React.useState(false);
+  const [shortMovies, setShortMovies] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isChecked) {
       setShortMovies(findShortMovies(movies));
     }
   }, [isChecked, movies, findShortMovies]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     resetMessage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
