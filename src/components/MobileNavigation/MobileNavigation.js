@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './MobileNavigation.css';
 import {Link, NavLink} from "react-router-dom";
 import profileLogo from "../../images/profile-logo.svg";
@@ -6,9 +6,17 @@ import {TEXT} from "../../utils/constants";
 
 function MobileNavigation() {
   const [isBurgerMenu, setBurgerMenu] = useState(false);
+
   const handleClick = () => {
     setBurgerMenu(!isBurgerMenu);
+
   };
+
+  useEffect(() => {
+    const body = document.querySelector('body');
+    body.style.overflow = isBurgerMenu ? 'hidden' : 'auto';
+  }, [isBurgerMenu]);
+
 
   return (
     <nav className="mobile-navigation">
@@ -17,9 +25,9 @@ function MobileNavigation() {
               type="button"
               className={`mobile-navigation__btn ${isBurgerMenu ? "mobile-navigation__btn-pressed" : ""}`}
               id="nav-icon1">
-        <span className="mobile-navigation__bar"></span>
-        <span className="mobile-navigation__bar"></span>
-        <span className="mobile-navigation__bar"></span>
+        <span className="mobile-navigation__bar">{}</span>
+        <span className="mobile-navigation__bar">{}</span>
+        <span className="mobile-navigation__bar">{}</span>
       </button>
       {isBurgerMenu && (
         <div className="mobile-navigation__cover">
