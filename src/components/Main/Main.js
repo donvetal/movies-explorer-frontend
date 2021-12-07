@@ -7,10 +7,11 @@ import AboutMe from "../AboutMe/AboutMe";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 
-function Main() {
+function Main(props) {
+  const {loggedIn} = props;
   return (
     <section className="main">
-      <Header/>
+      <Header loggedIn={loggedIn}/>
       <Promo/>
       <AboutProject/>
       <Techs/>

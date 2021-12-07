@@ -9,13 +9,13 @@ import profileLogo from "../../images/profile-logo.svg";
 import MobileNavigation from "../MobileNavigation/MobileNavigation";
 
 function Header(props) {
-  const {isLoggedIn = true} = props;
+ const {loggedIn} = props;
   return (
-    <header className={`header ${isLoggedIn ? "" : "header__theme_rose"}`}>
+    <header className={`header ${loggedIn ? "" : "header__theme_rose"}`}>
       <Link to="/" className="header__link">
         <img src={logo} alt="логтип проекта" className="header__logo"/>
       </Link>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <>
           <Navigation/>
           <Link to="/profile" className="header__profile-link">

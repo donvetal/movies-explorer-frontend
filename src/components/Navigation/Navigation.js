@@ -2,14 +2,16 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import './Navigation.css';
+import {TEXT} from "../../utils/constants";
 
 
 function Navigation() {
   return (
     <nav className="navigation">
-      <NavLink to="/movies" activeClassName="navigation__link_active" className="navigation__link">Фильмы</NavLink>
-      <NavLink to="/saved-movies" activeClassName="navigation__link_active" className="navigation__link">Сохраненные
-        фильмы</NavLink>
+      <NavLink to="/movies" activeClassName="navigation__link_active"
+               className="navigation__link">{TEXT.movies}</NavLink>
+      <NavLink to="/saved-movies" activeClassName="navigation__link_active"
+               className="navigation__link">{TEXT.savedMovies}</NavLink>
     </nav>
   );
 

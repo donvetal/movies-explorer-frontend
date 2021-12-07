@@ -30,8 +30,7 @@
     width: 100%;
     justify-content: space-between;
     margin: 0;
-    padding: 0 0 16px;
-    border-bottom: 1px solid #E8E8E8;
+    padding: 0;
     box-sizing: border-box;
 
 }
@@ -61,8 +60,35 @@
     text-align: end;
     width: 100%;
     border: 0;
+    outline-style: none;
     padding: 0;
     margin: 0;
+
+}
+
+.profile__input-error {
+    display: flex;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    color: #FF4062;
+    margin: 0;
+    padding: 6px 0;
+    height: 12px;
+    width: 100%;
+    justify-content: flex-end;
+    text-align: end;
+
+}
+
+.profile__input-error:first-of-type {
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.profile__input-error:last-of-type {
+    margin: 163px auto 0;
+    max-width: 100%;
+    justify-content: center;
 
 }
 
@@ -75,7 +101,7 @@
     border: 0;
     cursor: pointer;
     transition: opacity 0.5s linear;
-    margin: 220px 0 16px;
+    margin: 0 0 16px;
     padding: 0;
     box-sizing: border-box;
 }
@@ -84,7 +110,16 @@
     opacity: 0.8;
 }
 
-.profile__link {
+
+.profile__btn:disabled {
+    background-color: #FFFFFF;
+    color: #A0A0A0;
+    cursor: not-allowed;
+    border-style: none;
+}
+
+
+.profile__btn-signout {
     font-size: 13px;
     font-weight: 500;
     line-height: 16px;
@@ -92,12 +127,16 @@
     text-decoration: none;
     padding: 0;
     margin: 0;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 0;
     transition: opacity 0.5s linear;
+    background-color: #FFFFFF;
 
 }
 
-.profile__link:hover {
-    opacity: 0.7;
+.profile__btn-signout:hover {
+    opacity: 0.8;
 }
 
 
@@ -111,14 +150,15 @@
         margin-bottom: 96px;
     }
 
-    .profile__btn {
-        margin-top: 210px;
+    .profile__input-error:last-of-type {
+        margin-top: 153px;
+
     }
 
 
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 460px) {
     .profile {
         margin-top: 70px;
         margin-bottom: 40px;
@@ -130,12 +170,15 @@
     }
 
     .profile__btn {
-        margin-top: 379px;
         font-size: 12px;
         line-height: 15px;
     }
+    .profile__input-error:last-of-type {
+        margin-top: 321px;
 
-    .profile__link {
+    }
+
+    .profile__btn-signout {
         font-size: 12px;
         line-height: 15px;
     }

@@ -4,9 +4,9 @@
 
 Бэкенд для приложения проекта.
 <br/>
-* Адресс сайта: http://api.kino-explorer.nomoredomains.club
+* Адресс сайта: https://kino-explorer.nomoredomains.club/
 * Бэкенд: http://api.kino-explorer.nomoredomains.club
-* IP-адрес сервера: 130.193.43.158
+* IP-адрес сервера: 51.250.16.41
 
 <br>
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -81,15 +81,16 @@
     margin: 0;
     padding: 6px 0;
     height: 12px;
+    text-align: start;
 
 }
 
 .login__input-error:last-of-type {
-    padding-bottom: 0;
+    margin-top: 173px;
 }
 
 .login__btn {
-    margin: 203px auto 0;
+    margin: 0 auto;
     padding: 13px 0 15px;
     width: 100%;
     background-color: #000000;
@@ -110,9 +111,9 @@
 
 .login__btn:disabled {
     background-color: #F8F8F8;
-    color: black;
+    color: #A0A0A0;
     cursor: not-allowed;
-    border: 1px solid black;
+    border-style: none;
 }
 
 .login__text {
@@ -172,11 +173,13 @@
     }
 
     .login__btn {
-        margin-top: 291px;
         padding-top: 15px;
         padding-bottom: 15px;
         font-size: 12px;
         line-height: 15px;
+    }
+    .login__input-error:last-of-type {
+        margin-top: 261px;
     }
 
     .login__text {

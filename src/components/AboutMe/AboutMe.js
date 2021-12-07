@@ -13,8 +13,9 @@ function AboutMe() {
           <div className="about-me__container">
             <h2 className="about-me__author">Виталий</h2>
             <p className="about-me__info">Фронтенд-разработчик</p>
-            <blockquote className="about-me__quote">Я родился и живу в Москве. У меня есть жена и енот. Я люблю смотреть
-              кинно, путешествовать. А ещё увлекаюсь спортом. Веду свой небольшой бизнес.
+            <blockquote className="about-me__quote">Я родился и живу в Москве. Я люблю путешествовать, слушать музыку,
+              смотреть
+              кино. Интересуюсь современными IT-технологиями. А ещё увлекаюсь спортом.
             </blockquote>
           </div>
           <ul className="about-me__links">
